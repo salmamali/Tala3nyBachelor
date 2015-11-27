@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Tala3nyBachelor</string>
     <string name="title_activity_login">Login</string>
+    <string name="title_activity_profile">Profile</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
