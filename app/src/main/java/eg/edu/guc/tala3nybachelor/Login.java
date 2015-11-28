@@ -1,16 +1,12 @@
 package eg.edu.guc.tala3nybachelor;
 
 import android.animation.LayoutTransition;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -27,36 +23,28 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import eg.edu.guc.tala3nybachelor.adapter.LoginSpinnerAdapter;
 
-public class Login extends AppCompatActivity implements Animation.AnimationListener{
+public class Login extends FullScreenActivity implements Animation.AnimationListener{
 
-    @Bind(R.id.register_text)
-    TextView registerText;
-    @Bind(R.id.username_login)
-    EditText username;
+    @Bind(R.id.register_text) TextView registerText;
+    @Bind(R.id.username_login) EditText username;
     @Bind(R.id.password_login) EditText password;
-    @Bind(R.id.login_button)
-    RelativeLayout loginButton;
-    @Bind(R.id.country_spinner)
-    Spinner countrySpinner;
+    @Bind(R.id.login_button) RelativeLayout loginButton;
+    @Bind(R.id.country_spinner) Spinner countrySpinner;
     @Bind(R.id.day_spinner) Spinner daySpinner;
     @Bind(R.id.month_spinner) Spinner monthSpinner;
     @Bind(R.id.year_spinner) Spinner yearSpinner;
-    @Bind(R.id.login_layout)
-    LinearLayout loginLayout;
-    @Bind(R.id.register_layout)
-    ScrollView registerLayout;
+    @Bind(R.id.login_layout) LinearLayout loginLayout;
+    @Bind(R.id.register_layout) ScrollView registerLayout;
+    @Bind(R.id.register_button) RelativeLayout registerButton;
 
     private Animation slideTop;
     private Animation slideBottom;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-
-
 
         registerText.setPaintFlags(registerText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         slideTop = AnimationUtils.loadAnimation(this, R.anim.slide_bottom_top);
@@ -73,14 +61,12 @@ public class Login extends AppCompatActivity implements Animation.AnimationListe
                 if (sUsername.equals("") || sPassword.equals("")) {
                     Toast.makeText(Login.this, "Username or Password cannot be empty", Toast.LENGTH_SHORT).show();
                 } else {
-
+                    Intent i = new Intent(Login.this, Profile.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(i);
                 }
-
-
             }
         });
-
-
 
         registerText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,12 +78,14 @@ public class Login extends AppCompatActivity implements Animation.AnimationListe
                 selectView(true);
                 registerLayout.startAnimation(slideTop);
                 registerLayout.setVisibility(View.VISIBLE);
+                registerLayout.setOverScrollMode(View.OVER_SCROLL_NEVER);
+                registerLayout.setVerticalScrollBarEnabled(false);
             }
         });
 
         //initializing country spinner
         Locale[] locale = Locale.getAvailableLocales();
-        ArrayList<String> countries = new ArrayList<String>();
+        ArrayList<String> countries = new ArrayList<>();
         String country;
         for( Locale loc : locale ){
             country = loc.getDisplayCountry();
@@ -108,6 +96,8 @@ public class Login extends AppCompatActivity implements Animation.AnimationListe
         Collections.sort(countries, String.CASE_INSENSITIVE_ORDER);
         LoginSpinnerAdapter countriesAdapter = new LoginSpinnerAdapter(this, countries);
         countrySpinner.setAdapter(countriesAdapter);
+        countrySpinner.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        countrySpinner.setVerticalScrollBarEnabled(false);
 
         //initializing day spinner
         ArrayList<String> days = new ArrayList<>();
@@ -116,6 +106,8 @@ public class Login extends AppCompatActivity implements Animation.AnimationListe
         }
         LoginSpinnerAdapter daysAdapter = new LoginSpinnerAdapter(this, days);
         daySpinner.setAdapter(daysAdapter);
+        daySpinner.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        daySpinner.setVerticalScrollBarEnabled(false);
 
         //initializing month spinner
         ArrayList<String> months = new ArrayList<>();
@@ -124,6 +116,8 @@ public class Login extends AppCompatActivity implements Animation.AnimationListe
         }
         LoginSpinnerAdapter monthAdapter = new LoginSpinnerAdapter(this, months);
         monthSpinner.setAdapter(monthAdapter);
+        monthSpinner.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        monthSpinner.setVerticalScrollBarEnabled(false);
 
         //initializing year spinner
         ArrayList<String> years = new ArrayList<>();
@@ -132,9 +126,17 @@ public class Login extends AppCompatActivity implements Animation.AnimationListe
         }
         LoginSpinnerAdapter yearAdapter = new LoginSpinnerAdapter(this, years);
         yearSpinner.setAdapter(yearAdapter);
+        yearSpinner.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        yearSpinner.setVerticalScrollBarEnabled(false);
 
-
-
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Login.this, Profile.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+            }
+        });
     }
 
     @Override
@@ -143,6 +145,8 @@ public class Login extends AppCompatActivity implements Animation.AnimationListe
             registerLayout.startAnimation(slideBottom);
             registerLayout.setVisibility(View.GONE);
             selectView(false);
+        } else {
+            super.onBackPressed();
         }
     }
 
@@ -162,13 +166,11 @@ public class Login extends AppCompatActivity implements Animation.AnimationListe
 
     @Override
     public void onAnimationStart(Animation animation) {
-
         if (animation.equals(slideTop)) {
             registerLayout.setVisibility(View.VISIBLE);
         } else {
             registerLayout.setVisibility(View.GONE);
         }
-
     }
 
     @Override
