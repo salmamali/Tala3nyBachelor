@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/profile_image_holder"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        />
+
+    <ProgressBar
+        android:id="@+id/profile_image_progress"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
+        />
+
+    <TextView
+        android:id="@+id/profile_name_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:layout_marginTop="110dp"
+        android:layout_marginLeft="10dp"
+        />
+
+    <View
+        android:id="@+id/profile_separator_1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/profile_separator"
+        android:layout_below="@+id/profile_image_holder"
+        />
+
+    <LinearLayout
+        android:id="@+id/profile_options_layout"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:orientation="horizontal"
+        android:background="#13171717"
+        android:layout_below="@+id/profile_separator_1">
+
+        <com.joanzapata.iconify.widget.IconTextView
+            android:id="@+id/profile_options_post_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="POST {fa-pencil}"
+            android:textSize="@dimen/profile_icon_size"
+            android:textColor="@color/mainColor"
+            android:textStyle="bold"
+            android:layout_marginLeft="25dp"
+            />
+
+        <com.joanzapata.iconify.widget.IconTextView
+            android:id="@+id/profile_options_message_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="MESSAGE {fa-envelope}"
+            android:textSize="@dimen/profile_icon_size"
+            android:textColor="@color/mainColor"
+            android:textStyle="bold"
+            android:layout_marginLeft="@dimen/profile_buttons_between_margins"
+            />
+
+        <com.joanzapata.iconify.widget.IconTextView
+            android:id="@+id/profile_options_friends_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="FRIENDS {fa-group}"
+            android:textSize="@dimen/profile_icon_size"
+            android:textColor="@color/mainColor"
+            android:textStyle="bold"
+            android:layout_marginLeft="@dimen/profile_buttons_between_margins"
+            />
+
+        <com.joanzapata.iconify.widget.IconTextView
+            android:id="@+id/profile_options_menu_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="{fa-align-justify}"
+            android:textSize="@dimen/profile_icon_size"
+            android:textColor="@color/mainColor"
+            android:textStyle="bold"
+            android:layout_marginLeft="55dp"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/profile_separator_2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/profile_separator"
+        android:layout_below="@+id/profile_options_layout"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/profile_posts_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/profile_separator_2"
+        android:paddingBottom="5dp"
+        />
+
+
+</RelativeLayout>
