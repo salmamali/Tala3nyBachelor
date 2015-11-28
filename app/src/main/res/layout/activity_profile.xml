@@ -41,6 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:orientation="horizontal"
+        android:background="#13171717"
         android:layout_below="@+id/profile_separator_1">
 
         <com.joanzapata.iconify.widget.IconTextView
