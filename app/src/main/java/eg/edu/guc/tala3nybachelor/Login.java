@@ -3,17 +3,27 @@ package eg.edu.guc.tala3nybachelor;
 import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,6 +46,8 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
     @Bind(R.id.login_layout) LinearLayout loginLayout;
     @Bind(R.id.register_layout) ScrollView registerLayout;
     @Bind(R.id.register_button) RelativeLayout registerButton;
+    @Bind(R.id.facebook_login) ImageView facebookLogin;
+    @Bind(R.id.twitter_login) ImageView twitterLogin;
 
     private Animation slideTop;
     private Animation slideBottom;
@@ -137,6 +149,28 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
                 startActivity(i);
             }
         });
+
+        Picasso.with(this)
+                .load(R.drawable.twitter_logo_blue)
+                .resize(90, 90)
+                .into(twitterLogin, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.wtf("salma", "success");
+
+                    }
+
+                    @Override
+                    public void onError() {
+                        Log.wtf("salma", "error");
+                    }
+                });
+
+        Picasso.with(this)
+                .load(R.drawable.facebook_logo)
+                .resize(90, 90)
+                .into(facebookLogin);
+
     }
 
     @Override
@@ -181,5 +215,11 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
     @Override
     public void onAnimationRepeat(Animation animation) {
 
+    }
+
+    @Override
+    public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+        Log.wtf("salma", exception);
+        exception.printStackTrace();
     }
 }
