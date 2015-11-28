@@ -2,22 +2,28 @@ package eg.edu.guc.tala3nybachelor;
 
 import android.animation.LayoutTransition;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,7 +33,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import eg.edu.guc.tala3nybachelor.adapter.LoginSpinnerAdapter;
 
-public class Login extends AppCompatActivity implements Animation.AnimationListener{
+public class Login extends AppCompatActivity implements Animation.AnimationListener, Picasso.Listener{
 
     @Bind(R.id.register_text)
     TextView registerText;
@@ -45,6 +51,9 @@ public class Login extends AppCompatActivity implements Animation.AnimationListe
     LinearLayout loginLayout;
     @Bind(R.id.register_layout)
     ScrollView registerLayout;
+    @Bind(R.id.twitter_login)
+    ImageView twitterLogin;
+    @Bind(R.id.facebook_login) ImageView facebookLogin;
 
     private Animation slideTop;
     private Animation slideBottom;
@@ -134,6 +143,27 @@ public class Login extends AppCompatActivity implements Animation.AnimationListe
         yearSpinner.setAdapter(yearAdapter);
 
 
+        Picasso.with(this)
+                .load(R.drawable.twitter_logo_blue)
+                .resize(90, 90)
+                .into(twitterLogin, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.wtf("salma", "success");
+
+                    }
+
+                    @Override
+                    public void onError() {
+                        Log.wtf("salma", "error");
+                    }
+                });
+
+        Picasso.with(this)
+                .load(R.drawable.facebook_logo)
+                .resize(90, 90)
+                .into(facebookLogin);
+
 
     }
 
@@ -179,5 +209,11 @@ public class Login extends AppCompatActivity implements Animation.AnimationListe
     @Override
     public void onAnimationRepeat(Animation animation) {
 
+    }
+
+    @Override
+    public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+        Log.wtf("salma", exception);
+        exception.printStackTrace();
     }
 }
