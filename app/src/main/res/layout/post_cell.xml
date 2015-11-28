@@ -5,18 +5,54 @@
 
     <TextView
         android:id="@+id/post_cell_body"
-        android:layout_width="280dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="CELL BODY CELL BODY CELL BODY CELL BODY CELL BODY CELL BODY CELL BODY CELL BODY CELL BODY CELL BODY CELL BODY "
-        android:textSize="20sp"
-        android:layout_margin="20dp"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20dp"
         android:maxLines="2"
         android:ellipsize="end"
         />
 
     <TextView
+        android:id="@+id/post_cell_timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="20 mins"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="10dp"
+        />
+
+    <TextView
+        android:id="@+id/post_cell_likes_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/post_cell_body"
+        android:text="72 likes"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_marginTop="-15dp"
+        android:layout_marginLeft="20dp"
+        />
+
+    <TextView
+        android:id="@+id/post_cell_comments_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/post_cell_body"
+        android:layout_toRightOf="@+id/post_cell_likes_count"
+        android:text="4 comments"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_marginTop="-15dp"
+        android:layout_marginLeft="10dp"
         />
 
 </RelativeLayout>

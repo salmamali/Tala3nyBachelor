@@ -1,22 +1,28 @@
 package eg.edu.guc.tala3nybachelor;
 
-import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.joanzapata.iconify.Iconify;
-import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.joanzapata.iconify.widget.IconTextView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import eg.edu.guc.tala3nybachelor.adapter.PostsAdapter;
+import eg.edu.guc.tala3nybachelor.model.Post;
 
 public class Profile extends FullScreenActivity {
 
@@ -38,6 +44,9 @@ public class Profile extends FullScreenActivity {
     IconTextView icnFriends;
     @Bind(R.id.profile_options_menu_icon)
     IconTextView icnMenu;
+
+    @Bind(R.id.profile_posts_list_view)
+    RecyclerView postsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,5 +80,19 @@ public class Profile extends FullScreenActivity {
                     }
                 });
 
+        ArrayList<Post> posts = new ArrayList<>();
+        posts.add(new Post("I found this great topic!", 3, 4, 27));
+        posts.add(new Post("I need help finding a place to stay in Stuttgart", 23, 0, 3));
+        posts.add(new Post("For those interested in topics about machine learning and AI please comment or contact me", 41, 19, 34));
+
+
+        PostsAdapter adapter = new PostsAdapter(posts);
+        postsList.setAdapter(adapter);
+        postsList.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        postsList.setHorizontalScrollBarEnabled(false);
+
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        postsList.setLayoutManager(llm);
     }
 }
