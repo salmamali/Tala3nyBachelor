@@ -80,6 +80,13 @@
             android:orientation="horizontal"
             android:layout_gravity="center">
 
+            <com.twitter.sdk.android.core.identity.TwitterLoginButton
+                android:id="@+id/twitter_login_button"
+                android:layout_width="35dp"
+                android:layout_height="30dp"
+                android:layout_centerInParent="true"/>
+
+
             <ImageView
                 android:id="@+id/twitter_login"
                 android:layout_width="35dp"

@@ -32,6 +32,9 @@
             android:label="@string/title_activity_messages"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="93d7dbed489f4abab9350112c1ade8a299a9b2ef" />
     </application>
 
 </manifest>

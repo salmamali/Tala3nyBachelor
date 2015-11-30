@@ -25,6 +25,14 @@ import android.widget.Toast;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+
+import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
@@ -35,6 +43,11 @@ import eg.edu.guc.tala3nybachelor.adapter.LoginSpinnerAdapter;
 
 
 public class Login extends FullScreenActivity implements Animation.AnimationListener{
+
+    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
+    private static final String TWITTER_KEY = "BYXReGFLPIJy9vmkT3Y3ao4e3";
+    private static final String TWITTER_SECRET = "GaOW2g3unWQzIhs6zdx0MvV0SlXLlo0HghDJMWyplf1M9opVxi";
+
 
 
     @Bind(R.id.register_text) TextView registerText;
@@ -50,6 +63,7 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
     @Bind(R.id.register_button) RelativeLayout registerButton;
     @Bind(R.id.facebook_login) ImageView facebookLogin;
     @Bind(R.id.twitter_login) ImageView twitterLogin;
+    @Bind(R.id.twitter_login_button) TwitterLoginButton loginTwitterButton;
 
     private Animation slideTop;
     private Animation slideBottom;
@@ -57,6 +71,8 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
@@ -65,6 +81,7 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
         slideTop.setAnimationListener(this);
         slideBottom = AnimationUtils.loadAnimation(this, R.anim.slide_top_bottom);
         slideBottom.setAnimationListener(this);
+
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +100,28 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
                 }
             }
         });
+
+
+        loginTwitterButton.setCallback(new com.twitter.sdk.android.core.Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                // The TwitterSession is also available through:
+                // Twitter.getInstance().core.getSessionManager().getActiveSession()
+                TwitterSession session = result.data;
+                // TODO: Remove toast and use the TwitterSession's userID
+                // with your app's user model
+                String msg = "@" + session.getUserName() + " logged in! (#" + session.getUserId() + ")";
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                Log.d("TwitterKit", "Login with Twitter failure", exception);
+            }
+        });
+
+
+
 
         registerText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,6 +217,15 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
                 .into(facebookLogin);
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Make sure that the loginButton hears the result from any
+        // Activity that it triggered.
+        loginTwitterButton.onActivityResult(requestCode, resultCode, data);
+    }
+
 
     @Override
     public void onBackPressed() {
