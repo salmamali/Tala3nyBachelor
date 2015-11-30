@@ -2,6 +2,7 @@ package eg.edu.guc.tala3nybachelor;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -47,6 +48,8 @@ public class Profile extends FullScreenActivity {
 
     @Bind(R.id.profile_posts_list_view) RecyclerView postsList;
 
+    private SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,10 +57,12 @@ public class Profile extends FullScreenActivity {
 
         ButterKnife.bind(this);
         Picasso.with(this).setLoggingEnabled(true);
+        sharedPreferences = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE);
 
         Iconify.addIcons(icnPost, icnMessage, icnFriends, icnMenu, imgReload);
 
-        txtName.setText("Tarek ElBeih");
+        String name = sharedPreferences.getString("username", "Tarek ElBeih");
+        txtName.setText(name);
         txtName.setTextColor(Color.argb(200, 255, 255, 255));
 
         DisplayMetrics dm = getResources().getDisplayMetrics();

@@ -2,13 +2,9 @@ package eg.edu.guc.tala3nybachelor;
 
 import android.animation.LayoutTransition;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -22,10 +18,23 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
 
@@ -36,6 +45,7 @@ import eg.edu.guc.tala3nybachelor.adapter.LoginSpinnerAdapter;
 
 public class Login extends FullScreenActivity implements Animation.AnimationListener{
 
+    private CallbackManager callbackManager;
 
     @Bind(R.id.register_text) TextView registerText;
     @Bind(R.id.username_login) EditText username;
@@ -53,10 +63,16 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
 
     private Animation slideTop;
     private Animation slideBottom;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+        sharedPreferences = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE);
+
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
@@ -75,7 +91,7 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
                 if (sUsername.equals("") || sPassword.equals("")) {
                     Toast.makeText(Login.this, "Username or Password cannot be empty", Toast.LENGTH_SHORT).show();
                 } else {
-
+                    sharedPreferences.edit().putString("username", sUsername).apply();
                     Intent i = new Intent(Login.this, Profile.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(i);
@@ -177,6 +193,69 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
                 .centerCrop()
                 .into(facebookLogin);
 
+        facebookLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginManager.getInstance().logInWithReadPermissions(Login.this, Arrays.asList("public_profile", "email", "user_friends"));
+            }
+        });
+
+        LoginManager.getInstance().logOut();
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject jsonObject, GraphResponse response) {
+                        try {
+                            String name = jsonObject.getString("first_name") + "." + jsonObject.getString("last_name");
+                            sharedPreferences.edit().putString("username", name).apply();
+                            Intent i = new Intent(Login.this, Profile.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(i);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "first_name,last_name");
+                request.setParameters(parameters);
+                request.executeAsync();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        AppEventsLogger.deactivateApp(this);
     }
 
     @Override
