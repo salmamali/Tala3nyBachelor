@@ -83,13 +83,13 @@
 
             <ImageView
                 android:id="@+id/twitter_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_width="35dp"
+                android:layout_height="30dp" />
 
             <ImageView
                 android:id="@+id/facebook_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginLeft="80dp"/>
 
         </LinearLayout>

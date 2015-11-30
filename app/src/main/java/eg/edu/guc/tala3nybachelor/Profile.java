@@ -1,10 +1,12 @@
 package eg.edu.guc.tala3nybachelor;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -77,6 +79,7 @@ public class Profile extends FullScreenActivity {
                     @Override
                     public void onError() {
                         prgImage.setVisibility(View.GONE);
+                        Log.wtf("etf", "error");
                     }
                 });
 
@@ -94,5 +97,13 @@ public class Profile extends FullScreenActivity {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         postsList.setLayoutManager(llm);
+
+        icnMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Profile.this, Messages.class);
+                startActivity(i);
+            }
+        });
     }
 }

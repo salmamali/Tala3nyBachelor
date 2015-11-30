@@ -1,6 +1,7 @@
 package eg.edu.guc.tala3nybachelor;
 
 import android.animation.LayoutTransition;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,7 +34,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import eg.edu.guc.tala3nybachelor.adapter.LoginSpinnerAdapter;
 
-public class Login extends AppCompatActivity implements Animation.AnimationListener, Picasso.Listener{
+public class Login extends FullScreenActivity implements Animation.AnimationListener, Picasso.Listener{
 
     @Bind(R.id.register_text)
     TextView registerText;
@@ -82,7 +83,8 @@ public class Login extends AppCompatActivity implements Animation.AnimationListe
                 if (sUsername.equals("") || sPassword.equals("")) {
                     Toast.makeText(Login.this, "Username or Password cannot be empty", Toast.LENGTH_SHORT).show();
                 } else {
-
+                    Intent toProfile = new Intent(Login.this, Profile.class);
+                    startActivity(toProfile);
                 }
 
 
@@ -145,7 +147,8 @@ public class Login extends AppCompatActivity implements Animation.AnimationListe
 
         Picasso.with(this)
                 .load(R.drawable.twitter_logo_blue)
-                .resize(90, 90)
+                .fit()
+                .centerCrop()
                 .into(twitterLogin, new Callback() {
                     @Override
                     public void onSuccess() {
@@ -161,7 +164,8 @@ public class Login extends AppCompatActivity implements Animation.AnimationListe
 
         Picasso.with(this)
                 .load(R.drawable.facebook_logo)
-                .resize(90, 90)
+                .fit()
+                .centerCrop()
                 .into(facebookLogin);
 
 
@@ -182,11 +186,15 @@ public class Login extends AppCompatActivity implements Animation.AnimationListe
             password.setVisibility(View.GONE);
             loginButton.setVisibility(View.GONE);
             registerText.setVisibility(View.GONE);
+            twitterLogin.setVisibility(View.GONE);
+            facebookLogin.setVisibility(View.GONE);
         } else {
             username.setVisibility(View.VISIBLE);
             password.setVisibility(View.VISIBLE);
             loginButton.setVisibility(View.VISIBLE);
             registerText.setVisibility(View.VISIBLE);
+            twitterLogin.setVisibility(View.VISIBLE);
+            facebookLogin.setVisibility(View.VISIBLE);
         }
     }
 
