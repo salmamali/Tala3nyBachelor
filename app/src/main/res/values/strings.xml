@@ -8,4 +8,6 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="create_account"> <u>Create a new account</u></string>
     <string name="title_activity_messages">Messages</string>
+
+    <string name="facebook_app_id">803801309750598</string>
 </resources>
