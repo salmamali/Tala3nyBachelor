@@ -1,5 +1,6 @@
 package eg.edu.guc.tala3nybachelor;
 
+
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -8,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 import eg.edu.guc.tala3nybachelor.adapter.PostsAdapter;
 import eg.edu.guc.tala3nybachelor.model.Post;
 
@@ -30,25 +33,19 @@ public class Profile extends FullScreenActivity {
 
     private static final String PROFILE_IMAGE = "http://s-media-cache-ak0.pinimg.com/736x/8b/1e/f5/8b1ef57d12bb0fa2518b9111dab97809.jpg";
 
-    @Bind(R.id.profile_name_holder)
-    TextView txtName;
-    @Bind(R.id.profile_image_holder)
-    ImageView imgHolder;
-    @Bind(R.id.profile_image_progress)
-    ProgressBar prgImage;
+    @Bind(R.id.profile_name_holder) TextView txtName;
+    @Bind(R.id.profile_image_progress) ProgressBar prgImage;
+
+    @Bind(R.id.profile_image_holder) ImageView imgHolder;
 
     //icons
-    @Bind(R.id.profile_options_post_icon)
-    IconTextView icnPost;
-    @Bind(R.id.profile_options_message_icon)
-    IconTextView icnMessage;
-    @Bind(R.id.profile_options_friends_icon)
-    IconTextView icnFriends;
-    @Bind(R.id.profile_options_menu_icon)
-    IconTextView icnMenu;
+    @Bind(R.id.profile_options_post_icon) IconTextView icnPost;
+    @Bind(R.id.profile_options_messages_icon) IconTextView icnMessage;
+    @Bind(R.id.profile_options_friends_icon) IconTextView icnFriends;
+    @Bind(R.id.profile_options_menu_icon) IconTextView icnMenu;
+    @Bind(R.id.profile_image_refresh) IconTextView imgReload;
 
-    @Bind(R.id.profile_posts_list_view)
-    RecyclerView postsList;
+    @Bind(R.id.profile_posts_list_view) RecyclerView postsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,16 +53,61 @@ public class Profile extends FullScreenActivity {
         setContentView(R.layout.activity_profile);
 
         ButterKnife.bind(this);
+        Picasso.with(this).setLoggingEnabled(true);
 
-        Iconify.addIcons(icnPost, icnMessage, icnFriends, icnMenu);
+        Iconify.addIcons(icnPost, icnMessage, icnFriends, icnMenu, imgReload);
 
         txtName.setText("Tarek ElBeih");
         txtName.setTextColor(Color.argb(200, 255, 255, 255));
 
-        Resources r = getResources();
-        int width = r.getDisplayMetrics().widthPixels;
-        int density = (int)r.getDisplayMetrics().density;
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        updateProfileImage(dm);
 
+        ArrayList<Post> posts = new ArrayList<>();
+        posts.add(new Post("I found this great topic.", 3, 4, 27));
+        posts.add(new Post("I need help finding a place to stay in Stuttgart!", 23, 0, 3));
+        posts.add(new Post("For those interested in topics about machine learning and AI please comment or contact me", 41, 19, 34));
+
+
+        PostsAdapter adapter = new PostsAdapter(posts);
+        postsList.setAdapter(adapter);
+        postsList.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        postsList.setVerticalScrollBarEnabled(false);
+
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        postsList.setLayoutManager(llm);
+    }
+
+    public void onClick(View view) {
+        switch(view.getId()) {
+            case R.id.profile_options_post_icon:
+                Toast.makeText(this, "you pressed post icon", Toast.LENGTH_SHORT).show();
+                //TODO: post something
+                break;
+
+            case R.id.profile_options_messages_icon:
+                Toast.makeText(this, "you pressed messages icon", Toast.LENGTH_SHORT).show();
+                //TODO: open messages
+                break;
+
+            case R.id.profile_options_friends_icon:
+                Toast.makeText(this, "you pressed friends icon", Toast.LENGTH_SHORT).show();
+                //TODO: show friends
+                break;
+
+            case R.id.profile_options_menu_icon:
+                Toast.makeText(this, "you pressed menu icon", Toast.LENGTH_SHORT).show();
+                //TODO: open menu
+                break;
+
+            default:
+        }
+    }
+
+    private void updateProfileImage(final DisplayMetrics dm){
+        int width = dm.widthPixels;
+        int density = (int) dm.density;
         Picasso.with(this)
                 .load(PROFILE_IMAGE)
                 .resize(width,150 * density)
@@ -79,7 +121,6 @@ public class Profile extends FullScreenActivity {
                     @Override
                     public void onError() {
                         prgImage.setVisibility(View.GONE);
-                        Log.wtf("etf", "error");
                     }
                 });
 
@@ -105,5 +146,15 @@ public class Profile extends FullScreenActivity {
                 startActivity(i);
             }
         });
+        imgReload.setVisibility(View.VISIBLE);
+        imgReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imgReload.setVisibility(View.GONE);
+                prgImage.setVisibility(View.VISIBLE);
+                updateProfileImage(dm);
+            }
+        });
+
     }
 }

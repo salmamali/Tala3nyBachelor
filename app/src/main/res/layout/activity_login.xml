@@ -19,7 +19,6 @@
         android:orientation="vertical"
         android:visibility="visible">
 
-
     <EditText
         android:id="@+id/username_login"
         android:hint="Username"
@@ -172,23 +171,24 @@
                 android:orientation="horizontal"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:layout_marginLeft="30dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginBottom="5dp">
                 
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="male"/>
+                    android:text="male"
+                    />
 
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="female"
-                    android:layout_marginLeft="20dp"/>
+                    android:layout_marginStart="20dp"
+                    />
                 
             </RadioGroup>
-            
-            
+
         </LinearLayout>
 
         <LinearLayout
@@ -207,19 +207,22 @@
                 android:id="@+id/day_spinner"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"></Spinner>
+                android:layout_marginStart="15dp"
+                />
 
             <Spinner
                 android:id="@+id/month_spinner"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"></Spinner>
+                android:layout_marginStart="5dp"
+                />
 
             <Spinner
                 android:id="@+id/year_spinner"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"></Spinner>
+                android:layout_marginStart="5dp"
+                />
 
         </LinearLayout>
 
@@ -242,16 +245,13 @@
                 android:text="Country"
                 android:textSize="16sp"
                 />
+
             <Spinner
                 android:id="@+id/country_spinner"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp">
-
-
-
-            </Spinner>
-
+                android:layout_marginLeft="10dp"
+                />
 
         </LinearLayout>
 
@@ -264,8 +264,6 @@
             android:gravity="center"
             android:layout_marginTop="15dp"/>
 
-
-
         <RelativeLayout
             android:id="@+id/register_button"
             android:layout_width="100dp"
@@ -275,13 +273,15 @@
             android:gravity="center"
             android:layout_marginBottom="30dp">
 
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Register" />
 
         </RelativeLayout>
+
     </LinearLayout>
+
     </ScrollView>
+
 </RelativeLayout>

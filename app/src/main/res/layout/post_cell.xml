@@ -7,10 +7,10 @@
         android:id="@+id/post_cell_body"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="CELL BODY CELL BODY CELL BODY CELL BODY CELL BODY CELL BODY CELL BODY CELL BODY CELL BODY CELL BODY CELL BODY "
         android:textSize="16sp"
+        android:textColor="#CC000000"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="@dimen/post_cell_left_margin"
         android:layout_marginBottom="20dp"
         android:maxLines="2"
         android:ellipsize="end"
@@ -20,14 +20,14 @@
         android:id="@+id/post_cell_timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="20 mins"
+        android:maxWidth="40dp"
         android:textSize="10sp"
+        android:textColor="@color/black_overlay"
         android:textStyle="bold"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="5dp"
         android:layout_marginEnd="5dp"
         android:layout_marginTop="10dp"
+        android:maxLines="1"
         />
 
     <TextView
@@ -35,11 +35,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/post_cell_body"
-        android:text="72 likes"
         android:textSize="12sp"
+        android:textColor="@color/black_overlay"
         android:textStyle="bold"
         android:layout_marginTop="-15dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="@dimen/post_cell_left_margin"
+        android:maxLines="1"
         />
 
     <TextView
@@ -47,12 +48,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/post_cell_body"
-        android:layout_toRightOf="@+id/post_cell_likes_count"
-        android:text="4 comments"
+        android:layout_toEndOf="@+id/post_cell_likes_count"
+        android:textColor="@color/black_overlay"
         android:textSize="12sp"
         android:textStyle="bold"
         android:layout_marginTop="-15dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="5dp"
+        android:maxLines="1"
         />
 
 </RelativeLayout>
