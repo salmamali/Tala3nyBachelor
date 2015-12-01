@@ -60,6 +60,7 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
     @Bind(R.id.register_button) RelativeLayout registerButton;
     @Bind(R.id.facebook_login) ImageView facebookLogin;
     @Bind(R.id.twitter_login) ImageView twitterLogin;
+    @Bind(R.id.signin_picture) ImageView signinPicture;
 
     private Animation slideTop;
     private Animation slideBottom;
@@ -186,6 +187,12 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
                         Log.wtf("salma", "error");
                     }
                 });
+/*
+        Picasso.with(this)
+                .load(R.drawable.uni2)
+                .fit()
+                .centerCrop()
+                .into(signinPicture);*/
 
         Picasso.with(this)
                 .load(R.drawable.facebook_logo)
