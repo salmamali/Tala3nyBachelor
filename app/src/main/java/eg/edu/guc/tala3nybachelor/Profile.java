@@ -1,15 +1,13 @@
 package eg.edu.guc.tala3nybachelor;
 
-
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
@@ -45,8 +43,11 @@ public class Profile extends FullScreenActivity {
     @Bind(R.id.profile_options_friends_icon) IconTextView icnFriends;
     @Bind(R.id.profile_options_menu_icon) IconTextView icnMenu;
     @Bind(R.id.profile_image_refresh) IconTextView imgReload;
+    @Bind(R.id.drawer_logout_icon) IconTextView imgLogout;
+    @Bind(R.id.drawer_info_icon) IconTextView imgInfo;
 
     @Bind(R.id.profile_posts_list_view) RecyclerView postsList;
+    @Bind(R.id.settings_drawer) DrawerLayout settingsDrawer;
 
     private SharedPreferences sharedPreferences;
 
@@ -59,7 +60,7 @@ public class Profile extends FullScreenActivity {
         Picasso.with(this).setLoggingEnabled(true);
         sharedPreferences = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE);
 
-        Iconify.addIcons(icnPost, icnMessage, icnFriends, icnMenu, imgReload);
+        Iconify.addIcons(icnPost, icnMessage, icnFriends, icnMenu, imgReload, imgLogout, imgInfo);
 
         String name = sharedPreferences.getString("username", "Tarek ElBeih");
         txtName.setText(name);
@@ -72,7 +73,6 @@ public class Profile extends FullScreenActivity {
         posts.add(new Post("I found this great topic.", 3, 4, 27));
         posts.add(new Post("I need help finding a place to stay in Stuttgart!", 23, 0, 3));
         posts.add(new Post("For those interested in topics about machine learning and AI please comment or contact me", 41, 19, 34));
-
 
         PostsAdapter adapter = new PostsAdapter(posts);
         postsList.setAdapter(adapter);
@@ -88,23 +88,29 @@ public class Profile extends FullScreenActivity {
         switch(view.getId()) {
             case R.id.profile_options_post_icon:
                 Toast.makeText(this, "you pressed post icon", Toast.LENGTH_SHORT).show();
-                //TODO: post something
+                //TODO: Launch post activity!
                 break;
 
             case R.id.profile_options_messages_icon:
-                Toast.makeText(this, "you pressed messages icon", Toast.LENGTH_SHORT).show();
-                //TODO: open messages
+                Intent messages = new Intent(Profile.this, Messages.class);
+                startActivity(messages);
                 break;
 
             case R.id.profile_options_friends_icon:
                 Toast.makeText(this, "you pressed friends icon", Toast.LENGTH_SHORT).show();
-                //TODO: show friends
+                //TODO: Launch friends activity!
                 break;
 
             case R.id.profile_options_menu_icon:
-                Toast.makeText(this, "you pressed menu icon", Toast.LENGTH_SHORT).show();
-                //TODO: open menu
+                settingsDrawer.openDrawer(GravityCompat.END);
                 break;
+
+            case R.id.drawer_logout_icon:
+                Intent logout = new Intent(this, Login.class);
+                startActivity(logout);
+
+            case R.id.drawer_info_icon:
+                //TODO: Launch info activity!
 
             default:
         }
@@ -129,28 +135,6 @@ public class Profile extends FullScreenActivity {
                     }
                 });
 
-        ArrayList<Post> posts = new ArrayList<>();
-        posts.add(new Post("I found this great topic!", 3, 4, 27));
-        posts.add(new Post("I need help finding a place to stay in Stuttgart", 23, 0, 3));
-        posts.add(new Post("For those interested in topics about machine learning and AI please comment or contact me", 41, 19, 34));
-
-
-        PostsAdapter adapter = new PostsAdapter(posts);
-        postsList.setAdapter(adapter);
-        postsList.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        postsList.setHorizontalScrollBarEnabled(false);
-
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        postsList.setLayoutManager(llm);
-
-        icnMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Profile.this, Messages.class);
-                startActivity(i);
-            }
-        });
         imgReload.setVisibility(View.VISIBLE);
         imgReload.setOnClickListener(new View.OnClickListener() {
             @Override
