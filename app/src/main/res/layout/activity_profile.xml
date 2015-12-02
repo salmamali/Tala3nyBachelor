@@ -161,7 +161,7 @@
             android:id="@+id/drawer_info_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
             android:text="INFO {fa-info-circle}"
             android:textSize="@dimen/profile_icon_size"
             android:textColor="@color/mainColor"
@@ -173,12 +173,20 @@
             android:paddingEnd="10dp"
             />
 
+        <View
+            android:id="@+id/drawer_separator_1"
+            android:layout_width="140dp"
+            android:layout_height="1dp"
+            android:background="#30000000"
+            android:layout_below="@+id/drawer_info_icon"
+            />
+
         <com.joanzapata.iconify.widget.IconTextView
             android:id="@+id/drawer_logout_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/drawer_info_icon"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/drawer_separator_1"
             android:text="LOGOUT {fa-power-off}"
             android:textSize="@dimen/profile_icon_size"
             android:textColor="@color/mainColor"
