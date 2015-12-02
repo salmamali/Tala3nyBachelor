@@ -9,12 +9,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.widget.IconTextView;
 import com.squareup.picasso.Callback;
@@ -26,6 +28,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import eg.edu.guc.tala3nybachelor.adapter.PostsAdapter;
+import eg.edu.guc.tala3nybachelor.model.Comment;
 import eg.edu.guc.tala3nybachelor.model.Post;
 
 public class Profile extends FullScreenActivity {
@@ -50,6 +53,7 @@ public class Profile extends FullScreenActivity {
     @Bind(R.id.settings_drawer) DrawerLayout settingsDrawer;
 
     private SharedPreferences sharedPreferences;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +66,7 @@ public class Profile extends FullScreenActivity {
 
         Iconify.addIcons(icnPost, icnMessage, icnFriends, icnMenu, imgReload, imgLogout, imgInfo);
 
-        String name = sharedPreferences.getString("username", "Tarek ElBeih");
+        name = sharedPreferences.getString("username", "Tarek ElBeih");
         txtName.setText(name);
         txtName.setTextColor(Color.argb(200, 255, 255, 255));
 
@@ -108,12 +112,37 @@ public class Profile extends FullScreenActivity {
             case R.id.drawer_logout_icon:
                 Intent logout = new Intent(this, Login.class);
                 startActivity(logout);
+                break;
 
             case R.id.drawer_info_icon:
                 //TODO: Launch info activity!
+                break;
+
+            case R.id.post_cell_likes_count:
+            case R.id.post_cell_comments_count:
+                launchPostActivity();
+                break;
 
             default:
         }
+    }
+
+    private void launchPostActivity() {
+        Intent post = new Intent(this, PostActivity.class);
+        post.putExtra("post-owner", name);
+        post.putExtra("post-body", "I found this great topic.");
+        post.putExtra("post-time", "27mins");
+
+        ArrayList<Comment> comments = new ArrayList<>();
+        comments.add(new Comment("Salma", "how can I contact you?", 12));
+        comments.add(new Comment(name, "send me an email", 10));
+        comments.add(new Comment("Salma", "ok, thanks!", 6));
+
+        Gson gson = new Gson();
+        String jsonComments = gson.toJson(comments);
+        post.putExtra("comments", jsonComments);
+
+        startActivity(post);
     }
 
     private void updateProfileImage(final DisplayMetrics dm){
