@@ -2,6 +2,7 @@ package eg.edu.guc.tala3nybachelor;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -20,6 +21,9 @@ import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.widget.IconTextView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.twitter.sdk.android.core.TwitterApiClient;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.services.StatusesService;
 
 import java.util.ArrayList;
 
@@ -47,17 +51,23 @@ public class Profile extends FullScreenActivity {
 
     @Bind(R.id.profile_posts_list_view) RecyclerView postsList;
 
+    private SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        sharedPreferences = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE);
+
+
         ButterKnife.bind(this);
         Picasso.with(this).setLoggingEnabled(true);
 
         Iconify.addIcons(icnPost, icnMessage, icnFriends, icnMenu, imgReload);
+        String username = sharedPreferences.getString("username", "");
 
-        txtName.setText("Tarek ElBeih");
+        txtName.setText(username);
         txtName.setTextColor(Color.argb(200, 255, 255, 255));
 
         DisplayMetrics dm = getResources().getDisplayMetrics();

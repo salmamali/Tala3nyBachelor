@@ -2,6 +2,7 @@ package eg.edu.guc.tala3nybachelor;
 
 import android.animation.LayoutTransition;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,10 +28,14 @@ import com.squareup.picasso.Picasso;
 
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterApiClient;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.core.models.Tweet;
+import com.twitter.sdk.android.core.services.StatusesService;
 
 import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
@@ -67,12 +72,16 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
 
     private Animation slideTop;
     private Animation slideBottom;
+    private SharedPreferences sharedPreferences;
+    String fullName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
+        sharedPreferences = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
@@ -110,8 +119,28 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
                 TwitterSession session = result.data;
                 // TODO: Remove toast and use the TwitterSession's userID
                 // with your app's user model
-                String msg = "@" + session.getUserName() + " logged in! (#" + session.getUserId() + ")";
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                String msg = session.getUserName();
+                //final String username;
+               // Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+               // String name = jsonObject.getString("first_name") + "." + jsonObject.getString("last_name");
+                TwitterApiClient twitterApiClient = TwitterCore.getInstance().getApiClient();
+                StatusesService statusesService = twitterApiClient.getStatusesService();
+                statusesService.show(session.getUserId(), null, null, null, new com.twitter.sdk.android.core.Callback<Tweet>() {
+                    @Override
+                    public void success(Result<Tweet> result) {
+                        Tweet result1 = result.data;
+                        fullName = result1.user.name;
+                    }
+
+                    @Override
+                    public void failure(TwitterException e) {
+
+                    }
+                });
+                sharedPreferences.edit().putString("username", msg).apply();
+                Intent i = new Intent(Login.this, Profile.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
             }
 
             @Override
@@ -215,6 +244,13 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
                 .fit()
                 .centerCrop()
                 .into(facebookLogin);
+
+        twitterLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginTwitterButton.performClick();
+            }
+        });
 
     }
 
