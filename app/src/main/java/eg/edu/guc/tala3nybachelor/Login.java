@@ -4,6 +4,7 @@ import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -61,6 +62,7 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
     @Bind(R.id.facebook_login) ImageView facebookLogin;
     @Bind(R.id.twitter_login) ImageView twitterLogin;
     @Bind(R.id.signin_picture) ImageView signinPicture;
+    @Bind(R.id.login_text) TextView loginText;
 
     private Animation slideTop;
     private Animation slideBottom;
@@ -82,6 +84,15 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
         slideTop.setAnimationListener(this);
         slideBottom = AnimationUtils.loadAnimation(this, R.anim.slide_top_bottom);
         slideBottom.setAnimationListener(this);
+
+        Typeface light=Typeface.createFromAsset(getAssets(),"fonts/montserrat-light.otf");
+
+
+        Typeface bold=Typeface.createFromAsset(getAssets(),"fonts/montserrat-bold.otf");
+        registerText.setTypeface(light);
+        username.setTypeface(light);
+        password.setTypeface(light);
+        loginText.setTypeface(bold);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
