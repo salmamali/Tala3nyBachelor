@@ -60,7 +60,6 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
     @Bind(R.id.profile_posts_list_view) RecyclerView postsList;
     @Bind(R.id.settings_drawer) DrawerLayout settingsDrawer;
 
- //   private SharedPreferences sharedPreferences;
     private String name;
     private Animation slideRight, slideLeft;
     private PostsAdapter adapter;
@@ -73,9 +72,6 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        //sharedPreferences = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE);
-
-
         ButterKnife.bind(this);
         Picasso.with(this).setLoggingEnabled(true);
         sharedPreferences = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE);
@@ -86,7 +82,7 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         slideLeft = AnimationUtils.loadAnimation(this, R.anim.slide_right_left);
         slideLeft.setAnimationListener(this);
 
-        name = sharedPreferences.getString("username", "Tarek ElBeih");
+        name = sharedPreferences.getString("username", "");
         txtName.setText(name);
         txtName.setTextColor(Color.argb(200, 255, 255, 255));
 
@@ -110,6 +106,7 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
 
     @Override
     protected void onResume() {
+        settingsDrawer.closeDrawers();
         super.onResume();
 
         postEditText.setText("");
@@ -146,6 +143,11 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
             case R.id.drawer_logout_icon:
                 Intent logout = new Intent(this, Login.class);
                 startActivity(logout);
+                break;
+
+            case R.id.drawer_feed_icon:
+                Intent feed = new Intent(this, Feed.class);
+                startActivity(feed);
                 break;
 
             case R.id.drawer_info_icon:
