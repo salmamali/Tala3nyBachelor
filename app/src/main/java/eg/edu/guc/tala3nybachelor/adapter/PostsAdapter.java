@@ -1,10 +1,15 @@
 package eg.edu.guc.tala3nybachelor.adapter;
 
+import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.joanzapata.iconify.Iconify;
+import com.joanzapata.iconify.widget.IconTextView;
 
 import java.util.ArrayList;
 
@@ -19,14 +24,18 @@ import eg.edu.guc.tala3nybachelor.model.Post;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
     private ArrayList<Post> posts;
+    Context context;
 
-    public PostsAdapter(ArrayList<Post> posts) {
+
+    public PostsAdapter(Context context, ArrayList<Post> posts) {
         this.posts = posts;
+        this.context = context;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_cell, parent, false);
+
         return new ViewHolder(view);
     }
 
@@ -50,6 +59,16 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             }
         }
 
+        Typeface light=Typeface.createFromAsset(context.getAssets(), "fonts/montserrat-light.otf");
+        holder.icnLike.setTypeface(light);
+        holder.icnComment.setTypeface(light);
+        holder.icnFollow.setTypeface(light);
+        holder.txtBody.setTypeface(light);
+        holder.txtCommentsCount.setTypeface(light);
+        holder.txtLikesCount.setTypeface(light);
+        holder.txtFollowersCount.setTypeface(light);
+        holder.txtTimeStamp.setTypeface(light);
+
     }
 
     @Override
@@ -62,7 +81,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         @Bind(R.id.post_cell_timestamp) TextView txtTimeStamp;
         @Bind(R.id.post_cell_likes_count) TextView txtLikesCount;
         @Bind(R.id.post_cell_comments_count) TextView txtCommentsCount;
-
+        @Bind(R.id.drawer_like_icon) IconTextView icnLike;
+        @Bind(R.id.drawer_comment_icon) IconTextView icnComment;
+        @Bind(R.id.drawer_follow_icon) IconTextView icnFollow;
+        @Bind(R.id.post_cell_followers_count) TextView txtFollowersCount;
 
         public ViewHolder(View v) {
             super(v);
