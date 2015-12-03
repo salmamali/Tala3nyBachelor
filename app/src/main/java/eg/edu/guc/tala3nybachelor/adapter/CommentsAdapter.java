@@ -1,5 +1,7 @@
 package eg.edu.guc.tala3nybachelor.adapter;
 
+import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +21,11 @@ import eg.edu.guc.tala3nybachelor.model.Comment;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
     private ArrayList<Comment> comments;
+    Context context;
 
-    public CommentsAdapter(ArrayList<Comment> comments) {
+    public CommentsAdapter(Context context, ArrayList<Comment> comments) {
         this.comments = comments;
+        this.context = context;
     }
 
     @Override
@@ -35,7 +39,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
         Comment singleComment = comments.get(position);
 
         if(singleComment.getSender() !=null)
-            holder.txtSender.setText(singleComment.getSender());
+            holder.txtSender.setText(singleComment.getSender()+": ");
         if(singleComment.getBody() != null)
             holder.txtBody.setText(singleComment.getBody());
 
@@ -47,6 +51,10 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
                 holder.txtTimeStamp.setText(time + "mins");
             }
         }
+        Typeface light=Typeface.createFromAsset(context.getAssets(), "fonts/montserrat-light.otf");
+        holder.txtSender.setTypeface(light);
+        holder.txtBody.setTypeface(light);
+
     }
 
     @Override

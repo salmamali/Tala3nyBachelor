@@ -29,17 +29,20 @@
         android:layout_height="wrap_content"
         android:maxWidth="330dp"
         android:layout_marginStart="30dp"
+        android:textColor="#CC000000"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:layout_below="@+id/comment_sender_holder"
         />
 
     <View
-        android:layout_width="match_parent"
+        android:id="@+id/separator"
+        android:layout_width="330dp"
         android:layout_height="1dp"
-        android:background="#0D000000"
+        android:layout_centerInParent="true"
+        android:background="@color/separator_color"
         android:layout_below="@+id/comment_body_holder"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="3dp"
         />
 
 </RelativeLayout>

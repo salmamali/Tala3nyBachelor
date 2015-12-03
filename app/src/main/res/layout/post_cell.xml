@@ -102,7 +102,8 @@
         android:layout_centerInParent="true"
         android:background="@color/separator_color"
         android:layout_below="@+id/post_cell_comments_count"
-        android:layout_marginTop="3dp"/>
+        android:layout_marginTop="3dp"
+        />
 
     <LinearLayout
         android:id="@+id/profile_options_layout"

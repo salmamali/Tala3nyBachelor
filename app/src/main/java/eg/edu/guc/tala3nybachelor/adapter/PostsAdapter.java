@@ -67,7 +67,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         holder.txtCommentsCount.setTypeface(light);
         holder.txtLikesCount.setTypeface(light);
         holder.txtFollowersCount.setTypeface(light);
-        holder.txtTimeStamp.setTypeface(light);
 
     }
 

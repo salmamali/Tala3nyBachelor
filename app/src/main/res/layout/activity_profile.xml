@@ -160,11 +160,44 @@
             android:visibility="gone">
 
             <TextView
+                android:id="@+id/personal_info_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PERSONAL INFO"
+                android:textColor="@color/colorAccent"
+                android:layout_marginTop="10dp"
+                android:textSize="20sp"
+                android:layout_marginBottom="15dp"/>
+
+            <TextView
+                android:id="@+id/firstname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="First Name: Tarek"
+                android:textSize="16sp"
+                android:layout_marginLeft="10dp"
+                android:layout_below="@+id/personal_info_text"
+                />
+
+            <TextView
+                android:id="@+id/lastname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last Name: ElBeih"
+                android:textSize="16sp"
+                android:layout_marginLeft="10dp"
+                android:layout_below="@+id/firstname"
+                />
+
+
+            <TextView
                 android:id="@+id/profile_info_age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Age: 21"
                 android:textSize="16sp"
+                android:layout_below="@+id/lastname"
+                android:layout_marginLeft="10dp"
                 />
 
             <TextView
@@ -174,6 +207,7 @@
                 android:layout_below="@+id/profile_info_age"
                 android:text="Gender: Male"
                 android:textSize="16sp"
+                android:layout_marginLeft="10dp"
                 />
 
             <TextView
@@ -183,6 +217,7 @@
                 android:layout_below="@+id/profile_info_gender"
                 android:text="Nationality: Egyptian"
                 android:textSize="16sp"
+                android:layout_marginLeft="10dp"
                 />
 
         </RelativeLayout>
