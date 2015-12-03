@@ -4,12 +4,21 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/sender_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You wrote "
+        android:layout_marginTop="5dp"
+        android:textColor="@color/black_overlay"
+        android:layout_marginLeft="15dp"/>
+
+    <TextView
         android:id="@+id/post_cell_body"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:textColor="#CC000000"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="28dp"
         android:layout_marginStart="@dimen/post_cell_left_margin"
         android:layout_marginBottom="20dp"
         android:maxLines="2"
@@ -66,5 +75,99 @@
         android:maxLines="1"
         android:onClick="onClick"
         />
+
+    <TextView
+        android:id="@+id/post_cell_followers_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/post_cell_body"
+        android:layout_toEndOf="@+id/post_cell_comments_count"
+        android:textColor="@color/black_overlay"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:text="2 followers"
+        android:layout_marginTop="-15dp"
+        android:paddingStart="3dp"
+        android:paddingEnd="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:maxLines="1"
+        android:onClick="onClick"
+        />
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="330dp"
+        android:layout_height="1dp"
+        android:layout_centerInParent="true"
+        android:background="@color/separator_color"
+        android:layout_below="@+id/post_cell_comments_count"
+        android:layout_marginTop="3dp"/>
+
+    <LinearLayout
+        android:id="@+id/profile_options_layout"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="-5dp"
+        android:layout_below="@+id/separator">
+
+    <com.joanzapata.iconify.widget.IconTextView
+        android:id="@+id/drawer_like_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="{fa-thumbs-up} Like"
+        android:textSize="@dimen/profile_icon_size"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
+        android:onClick="onClick"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="@dimen/profile_options_padding"
+        android:paddingEnd="@dimen/profile_options_padding"
+        />
+
+    <com.joanzapata.iconify.widget.IconTextView
+        android:id="@+id/drawer_comment_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="{fa-comment-o} Comment"
+        android:textSize="@dimen/profile_icon_size"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
+        android:onClick="onClick"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="@dimen/profile_options_padding"
+        android:paddingEnd="@dimen/profile_options_padding"
+        />
+
+        <com.joanzapata.iconify.widget.IconTextView
+            android:id="@+id/drawer_follow_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="{fa-check-circle-o} Follow"
+            android:textSize="@dimen/profile_icon_size"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"
+            android:onClick="onClick"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="@dimen/profile_options_padding"
+            android:paddingEnd="@dimen/profile_options_padding"
+            />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/separator2"
+        android:layout_width="match_parent"
+        android:layout_height="7dp"
+        android:layout_centerInParent="true"
+        android:background="@color/separator_color"
+        android:layout_below="@+id/profile_options_layout"/>
 
 </RelativeLayout>

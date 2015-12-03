@@ -10,6 +10,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="93d7dbed489f4abab9350112c1ade8a299a9b2ef" />
@@ -50,11 +51,17 @@
             android:name=".PostActivity"
             android:label="@string/title_activity_post"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".FriendsActivity"
             android:label="@string/title_activity_friends"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+
+
+        <activity android:name=".Feed"
+            android:label="@string/title_activity_feed"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

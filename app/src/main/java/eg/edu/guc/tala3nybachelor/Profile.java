@@ -4,6 +4,7 @@ import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,13 +18,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.widget.IconTextView;
 import com.squareup.picasso.Callback;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -35,34 +37,61 @@ import eg.edu.guc.tala3nybachelor.adapter.PostsAdapter;
 import eg.edu.guc.tala3nybachelor.model.Comment;
 import eg.edu.guc.tala3nybachelor.model.Post;
 
-public class Profile extends FullScreenActivity implements Animation.AnimationListener{
+public class Profile extends FullScreenActivity implements Animation.AnimationListener {
 
     private static final String PROFILE_IMAGE = "http://s-media-cache-ak0.pinimg.com/736x/8b/1e/f5/8b1ef57d12bb0fa2518b9111dab97809.jpg";
 
-    @Bind(R.id.profile_name_holder) TextView txtName;
-    @Bind(R.id.profile_image_progress) ProgressBar prgImage;
+    @Bind(R.id.profile_name_holder)
+    TextView txtName;
+    @Bind(R.id.profile_image_progress)
+    ProgressBar prgImage;
 
-    @Bind(R.id.profile_image_holder) ImageView imgHolder;
+    @Bind(R.id.profile_image_holder)
+    ImageView imgHolder;
 
-    @Bind(R.id.profile_options_layout) LinearLayout profileOptionsLayout;
-    @Bind(R.id.profile_post_edit_layout) LinearLayout postEditLayout;
-    @Bind(R.id.profile_post_edit_text) EditText postEditText;
+    @Bind(R.id.profile_options_layout)
+    LinearLayout profileOptionsLayout;
+    @Bind(R.id.profile_post_edit_layout)
+    LinearLayout postEditLayout;
+
+    @Bind(R.id.profile_post_edit_text)
+    EditText postEditText;
+
+    @Bind(R.id.profile_info_age) TextView txtAge;
+    @Bind(R.id.profile_info_gender) TextView txtGender;
+    @Bind(R.id.profile_info_nationality) TextView txtNationality;
 
     //icons
-    @Bind(R.id.profile_options_post_icon) IconTextView icnPost;
-    @Bind(R.id.profile_options_messages_icon) IconTextView icnMessage;
-    @Bind(R.id.profile_options_friends_icon) IconTextView icnFriends;
-    @Bind(R.id.profile_options_menu_icon) IconTextView icnMenu;
-    @Bind(R.id.profile_image_refresh) IconTextView imgReload;
-    @Bind(R.id.drawer_logout_icon) IconTextView imgLogout;
-    @Bind(R.id.drawer_info_icon) IconTextView imgInfo;
+    @Bind(R.id.profile_options_post_icon)
+    IconTextView icnPost;
+    @Bind(R.id.profile_options_messages_icon)
+    IconTextView icnMessage;
+    @Bind(R.id.profile_options_friends_icon)
+    IconTextView icnFriends;
+    @Bind(R.id.profile_options_menu_icon)
+    IconTextView icnMenu;
+    @Bind(R.id.profile_image_refresh)
+    IconTextView imgReload;
+    @Bind(R.id.drawer_logout_icon)
+    IconTextView imgLogout;
+    @Bind(R.id.drawer_info_icon)
+    IconTextView imgInfo;
+    @Bind(R.id.drawer_feed_icon)
+    IconTextView imgFeed;
 
-    @Bind(R.id.profile_posts_list_view) RecyclerView postsList;
-    @Bind(R.id.settings_drawer) DrawerLayout settingsDrawer;
+    @Bind(R.id.profile_posts_list_view)
+    RecyclerView postsList;
+    @Bind(R.id.settings_drawer)
+    DrawerLayout settingsDrawer;
 
- //   private SharedPreferences sharedPreferences;
+    @Bind(R.id.drawerPane)
+    RelativeLayout drawerPane;
+    @Bind(R.id.profile_info_layout)
+    RelativeLayout infoLayout;
+
     private String name;
     private Animation slideRight, slideLeft;
+    private int measuredWidth, measuredHeight;
     private PostsAdapter adapter;
     private ArrayList<Post> posts;
 
@@ -73,20 +102,31 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        //sharedPreferences = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE);
-
-
         ButterKnife.bind(this);
         Picasso.with(this).setLoggingEnabled(true);
         sharedPreferences = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE);
 
-        Iconify.addIcons(icnPost, icnMessage, icnFriends, icnMenu, imgReload, imgLogout, imgInfo);
         slideRight = AnimationUtils.loadAnimation(this, R.anim.slide_left_right);
         slideRight.setAnimationListener(this);
         slideLeft = AnimationUtils.loadAnimation(this, R.anim.slide_right_left);
         slideLeft.setAnimationListener(this);
+        drawerPane.measure(0, 0);
+        measuredHeight = drawerPane.getMeasuredHeight();
+        measuredWidth = drawerPane.getMeasuredWidth();
 
-        name = sharedPreferences.getString("username", "Tarek ElBeih");
+        Typeface light = Typeface.createFromAsset(getAssets(), "fonts/montserrat-light.otf");
+
+
+        Typeface bold = Typeface.createFromAsset(getAssets(), "fonts/montserrat-bold.otf");
+        icnPost.setTypeface(light);
+        icnMessage.setTypeface(light);
+        icnFriends.setTypeface(light);
+        imgLogout.setTypeface(light);
+        imgInfo.setTypeface(light);
+
+        imgFeed.setTypeface(light);
+
+        name = sharedPreferences.getString("username", "");
         txtName.setText(name);
         txtName.setTextColor(Color.argb(200, 255, 255, 255));
 
@@ -98,7 +138,7 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         posts.add(new Post("I need help finding a place to stay in Stuttgart!", 23, 0, 3));
         posts.add(new Post("For those interested in topics about machine learning and AI please comment or contact me", 41, 19, 34));
 
-        adapter = new PostsAdapter(posts);
+        adapter = new PostsAdapter(this,posts);
         postsList.setAdapter(adapter);
         postsList.setOverScrollMode(View.OVER_SCROLL_NEVER);
         postsList.setVerticalScrollBarEnabled(false);
@@ -110,6 +150,8 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
 
     @Override
     protected void onResume() {
+        hideInfo();
+        settingsDrawer.closeDrawers();
         super.onResume();
 
         postEditText.setText("");
@@ -120,9 +162,10 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
     }
 
     public void onClick(View view) {
-        switch(view.getId()) {
+        switch (view.getId()) {
             case R.id.profile_options_post_icon:
-                if(postEditLayout.getVisibility() == View.GONE) {
+                hideInfo();
+                if (postEditLayout.getVisibility() == View.GONE) {
                     showAddPost();
                 } else {
                     hideAddPost();
@@ -148,8 +191,18 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
                 startActivity(logout);
                 break;
 
+            case R.id.drawer_feed_icon:
+                Intent feed = new Intent(this, Feed.class);
+                startActivity(feed);
+                break;
+
             case R.id.drawer_info_icon:
-                //TODO: Launch info activity!
+                settingsDrawer.closeDrawers();
+                if(infoLayout.getVisibility() == View.GONE) {
+                    showInfo();
+                } else {
+                    hideInfo();
+                }
                 break;
 
             case R.id.post_cell_likes_count:
@@ -157,8 +210,19 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
                 launchPostActivity();
                 break;
 
+
             default:
         }
+    }
+
+    private void showInfo() {
+        postsList.setVisibility(View.GONE);
+        infoLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void hideInfo() {
+        postsList.setVisibility(View.VISIBLE);
+        infoLayout.setVisibility(View.GONE);
     }
 
     private void hideAddPost() {
@@ -180,9 +244,14 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         profileOptionsLayout.startAnimation(slideRight);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     private void sendPost() {
         String postBody = postEditText.getText().toString();
-        if(!postBody.isEmpty()) {
+        if (!postBody.isEmpty()) {
             postEditText.setText("");
             Post p = new Post(postBody, 0, 0, 0);
             posts.add(p);
@@ -208,13 +277,14 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         startActivity(post);
     }
 
-    private void updateProfileImage(final DisplayMetrics dm){
+    private void updateProfileImage(final DisplayMetrics dm) {
         int width = dm.widthPixels;
         int density = (int) dm.density;
         Picasso.with(this)
                 .load(PROFILE_IMAGE)
-                .resize(width,150 * density)
+                .resize(width, 150 * density)
                 .centerCrop()
+                .memoryPolicy(MemoryPolicy.NO_CACHE)
                 .into(imgHolder, new Callback() {
                     @Override
                     public void onSuccess() {
@@ -224,19 +294,17 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
                     @Override
                     public void onError() {
                         prgImage.setVisibility(View.GONE);
+                        imgReload.setVisibility(View.VISIBLE);
+                        imgReload.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                imgReload.setVisibility(View.GONE);
+                                prgImage.setVisibility(View.VISIBLE);
+                                updateProfileImage(dm);
+                            }
+                        });
                     }
                 });
-
-        imgReload.setVisibility(View.VISIBLE);
-        imgReload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imgReload.setVisibility(View.GONE);
-                prgImage.setVisibility(View.VISIBLE);
-                updateProfileImage(dm);
-            }
-        });
-
     }
 
     @Override
@@ -246,12 +314,12 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
 
     @Override
     public void onAnimationEnd(Animation animation) {
-        if(animation == slideRight) {
+        if (animation == slideRight) {
             postEditLayout.setVisibility(View.VISIBLE);
             postEditLayout.setOverScrollMode(View.OVER_SCROLL_NEVER);
             postEditLayout.setVerticalScrollBarEnabled(false);
             postEditText.requestFocus();
-        } else if(animation == slideLeft) {
+        } else if (animation == slideLeft) {
             icnMenu.setVisibility(View.VISIBLE);
             icnMessage.setVisibility(View.VISIBLE);
             icnFriends.setVisibility(View.VISIBLE);
@@ -262,4 +330,5 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
     public void onAnimationRepeat(Animation animation) {
 
     }
+
 }
