@@ -23,16 +23,20 @@
         android:orientation="vertical"
         android:visibility="visible">
 
-    <EditText
-        android:id="@+id/username_login"
-        android:hint="Username"
-        android:textColorHint="#3F3F3F"
-        android:paddingLeft="10dp"
-        android:textSize="14sp"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="362dp"
-        android:background="@drawable/edit_text_white_rectangle" />
+
+        <EditText
+            android:id="@+id/username_login"
+            android:hint="Username"
+            android:textColorHint="#3F3F3F"
+            android:paddingLeft="10dp"
+            android:textSize="14sp"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="360dp"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:background="@drawable/edit_text_white_rectangle"
+            />
 
         <EditText
             android:id="@+id/password_login"
@@ -45,6 +49,8 @@
             android:paddingLeft="10dp"
             android:fontFamily="@string/app_name"
             android:textSize="14sp"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
             android:background="@drawable/edit_text_white_rectangle"/>
 
 
