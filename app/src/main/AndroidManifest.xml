@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="eg.edu.guc.tala3nybachelor" >
+    package="eg.edu.guc.tala3nybachelor">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -9,31 +9,37 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
+        
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="93d7dbed489f4abab9350112c1ade8a299a9b2ef" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:label="@string/app_name" />
-
-        <provider android:authorities="com.facebook.app.FacebookContentProvider1234"
+        <provider
             android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider1234"
             android:exported="true" />
 
         <activity
             android:name=".Login"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        
         <activity
             android:name=".Profile"
             android:label="@string/title_activity_profile"
@@ -41,8 +47,12 @@
         <activity
             android:name=".Messages"
             android:label="@string/title_activity_messages"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
+            
+        <activity
+            android:name=".PostActivity"
+            android:label="@string/title_activity_post"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
