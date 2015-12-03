@@ -88,6 +88,9 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
     RelativeLayout drawerPane;
     @Bind(R.id.profile_info_layout)
     RelativeLayout infoLayout;
+    @Bind(R.id.personal_info_text) TextView personalInfoText;
+    @Bind(R.id.firstname) TextView firstName;
+    @Bind(R.id.lastname) TextView lastName;
 
     private String name;
     private Animation slideRight, slideLeft;
@@ -123,8 +126,14 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         icnFriends.setTypeface(light);
         imgLogout.setTypeface(light);
         imgInfo.setTypeface(light);
-
+        personalInfoText.setTypeface(bold);
         imgFeed.setTypeface(light);
+        txtAge.setTypeface(light);
+        txtGender.setTypeface(light);
+        txtNationality.setTypeface(light);
+        firstName.setTypeface(light);
+        lastName.setTypeface(light);
+
 
         name = sharedPreferences.getString("username", "");
         txtName.setText(name);

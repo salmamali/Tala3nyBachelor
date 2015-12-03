@@ -1,6 +1,7 @@
 package eg.edu.guc.tala3nybachelor;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,11 +34,20 @@ public class PostActivity extends FullScreenActivity {
 
     @Bind(R.id.post_comment_button) Button btnPostComment;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
         ButterKnife.bind(this);
+
+
+        Typeface light=Typeface.createFromAsset(getAssets(),"fonts/montserrat-light.otf");
+
+        txtSender.setTypeface(light);
+        txtBody.setTypeface(light);
+        editComment.setTypeface(light);
+        btnPostComment.setTypeface(light);
 
         sender = getIntent().getExtras().getString("post-owner");
         txtSender.setText(sender);
@@ -50,7 +60,7 @@ public class PostActivity extends FullScreenActivity {
         Gson gson = new Gson();
         final ArrayList<Comment> comments = gson.fromJson(commentsJson, new TypeToken<ArrayList<Comment>>(){}.getType());
 
-        final CommentsAdapter adapter = new CommentsAdapter(comments);
+        final CommentsAdapter adapter = new CommentsAdapter(this, comments);
         commentsList.setAdapter(adapter);
         commentsList.setOverScrollMode(View.OVER_SCROLL_NEVER);
         commentsList.setVerticalScrollBarEnabled(false);
