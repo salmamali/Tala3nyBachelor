@@ -89,7 +89,7 @@
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold"
                 android:paddingStart="25dp"
-                android:paddingEnd="20dp"
+                android:paddingEnd="@dimen/profile_options_padding"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:onClick="onClick"
@@ -104,8 +104,8 @@
                 android:textSize="@dimen/profile_icon_size"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
+                android:paddingStart="@dimen/profile_options_padding"
+                android:paddingEnd="@dimen/profile_options_padding"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:onClick="onClick"
@@ -120,8 +120,8 @@
                 android:textSize="@dimen/profile_icon_size"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
+                android:paddingStart="@dimen/profile_options_padding"
+                android:paddingEnd="@dimen/profile_options_padding"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:onClick="onClick"
@@ -131,12 +131,12 @@
                 android:id="@+id/profile_options_menu_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="center_vertical|end"
                 android:text="{fa-align-justify}"
                 android:textSize="@dimen/profile_icon_size"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold"
-                android:paddingStart="25dp"
+                android:paddingStart="@dimen/profile_options_padding"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:onClick="onClick"
@@ -213,5 +213,172 @@
             />
 
     </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/account_info_layout"
+        android:layout_width="20dp"
+        android:layout_height="30dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:gravity="center">
+
+        <LinearLayout
+            android:id="@+id/first_name_layout"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/first_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="First Name:"
+                android:textAlignment="textStart"
+                />
+
+            <TextView
+                android:id="@+id/first_namet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tarek"
+                android:layout_marginLeft="35dp"
+                />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/last_name_layout"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:layout_below="@+id/first_name_layout"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/last_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last Name:"
+                />
+
+            <TextView
+                android:id="@+id/last_namet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="El-Beih"
+                android:layout_marginLeft="35dp"
+                />
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/gender_layout"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/last_name_layout"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gender: "
+            />
+
+        <TextView
+            android:id="@+id/gendert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male"
+            android:layout_marginLeft="55dp"
+            />
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/dob_layout"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/gender_layout"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/dob"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date of Birth: "
+            />
+
+        <TextView
+            android:id="@+id/dobt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="03/01/1995"
+            android:layout_marginLeft="20dp"
+            />
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/country_layout"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/dob_layout"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/country"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Country: "
+            />
+
+        <TextView
+            android:id="@+id/countryt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Egypt"
+            android:layout_marginLeft="50dp"
+            />
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/city_layout"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/country_layout"
+        android:layout_marginTop="10dp">
+        <TextView
+            android:id="@+id/city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="City: "
+            />
+
+        <TextView
+            android:id="@+id/cityt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cairo"
+            android:layout_marginLeft="75dp"
+            />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>
