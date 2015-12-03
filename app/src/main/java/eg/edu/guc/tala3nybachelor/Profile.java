@@ -64,7 +64,7 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
     @Bind(R.id.profile_posts_list_view) RecyclerView postsList;
     @Bind(R.id.settings_drawer) DrawerLayout settingsDrawer;
 
-    private SharedPreferences sharedPreferences;
+ //   private SharedPreferences sharedPreferences;
     private String name;
     private Animation slideRight, slideLeft;
     private PostsAdapter adapter;
@@ -77,7 +77,7 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        sharedPreferences = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE);
+        //sharedPreferences = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE);
 
 
         ButterKnife.bind(this);
