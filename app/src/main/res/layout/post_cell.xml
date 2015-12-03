@@ -4,12 +4,20 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/sender_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You wrote "
+        android:textColor="@color/black_overlay"
+        android:layout_marginLeft="15dp"/>
+
+    <TextView
         android:id="@+id/post_cell_body"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:textColor="#CC000000"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginStart="@dimen/post_cell_left_margin"
         android:layout_marginBottom="20dp"
         android:maxLines="2"
@@ -70,9 +78,9 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#0D000000"
+        android:layout_centerInParent="true"
+        android:background="@color/separator_color"
         android:layout_below="@+id/post_cell_comments_count"
-        android:layout_marginTop="10dp"
-        />
+        android:layout_marginTop="5dp"/>
 
 </RelativeLayout>

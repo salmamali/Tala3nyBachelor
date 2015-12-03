@@ -4,6 +4,7 @@ import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,7 @@ import com.google.gson.Gson;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.widget.IconTextView;
 import com.squareup.picasso.Callback;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -59,6 +62,9 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
 
     @Bind(R.id.profile_posts_list_view) RecyclerView postsList;
     @Bind(R.id.settings_drawer) DrawerLayout settingsDrawer;
+    @Bind(R.id.account_info_layout) LinearLayout accountInfoLayout;
+    @Bind(R.id.drawerPane)
+    RelativeLayout drawerPane;
 
     private String name;
     private Animation slideRight, slideLeft;
@@ -81,6 +87,18 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         slideRight.setAnimationListener(this);
         slideLeft = AnimationUtils.loadAnimation(this, R.anim.slide_right_left);
         slideLeft.setAnimationListener(this);
+
+
+        Typeface light=Typeface.createFromAsset(getAssets(),"fonts/montserrat-light.otf");
+
+
+        Typeface bold=Typeface.createFromAsset(getAssets(),"fonts/montserrat-bold.otf");
+        icnPost.setTypeface(light);
+        icnMessage.setTypeface(light);
+        icnFriends.setTypeface(light);
+        imgLogout.setTypeface(light);
+        imgInfo.setTypeface(light);
+
 
         name = sharedPreferences.getString("username", "");
         txtName.setText(name);
@@ -138,6 +156,9 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
 
             case R.id.profile_options_menu_icon:
                 settingsDrawer.openDrawer(GravityCompat.END);
+                if(accountInfoLayout.getVisibility() == View.VISIBLE) {
+                    accountInfoLayout.setVisibility(View.GONE);
+                }
                 break;
 
             case R.id.drawer_logout_icon:
@@ -151,13 +172,15 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
                 break;
 
             case R.id.drawer_info_icon:
-                //TODO: Launch info activity!
+                accountInfoLayout.setVisibility(View.VISIBLE);
+                drawerPane.setVisibility(View.GONE);
                 break;
 
             case R.id.post_cell_likes_count:
             case R.id.post_cell_comments_count:
                 launchPostActivity();
                 break;
+
 
             default:
         }
@@ -180,6 +203,14 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         transition.enableTransitionType(LayoutTransition.APPEARING);
         profileOptionsLayout.setLayoutTransition(transition);
         profileOptionsLayout.startAnimation(slideRight);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(accountInfoLayout.getVisibility() == View.VISIBLE) {
+            accountInfoLayout.setVisibility(View.GONE);
+        }
     }
 
     private void sendPost() {
@@ -217,6 +248,7 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
                 .load(PROFILE_IMAGE)
                 .resize(width,150 * density)
                 .centerCrop()
+                .memoryPolicy(MemoryPolicy.NO_CACHE)
                 .into(imgHolder, new Callback() {
                     @Override
                     public void onSuccess() {
@@ -226,19 +258,17 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
                     @Override
                     public void onError() {
                         prgImage.setVisibility(View.GONE);
+                        imgReload.setVisibility(View.VISIBLE);
+                        imgReload.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                imgReload.setVisibility(View.GONE);
+                                prgImage.setVisibility(View.VISIBLE);
+                                updateProfileImage(dm);
+                            }
+                        });
                     }
                 });
-
-        imgReload.setVisibility(View.VISIBLE);
-        imgReload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imgReload.setVisibility(View.GONE);
-                prgImage.setVisibility(View.VISIBLE);
-                updateProfileImage(dm);
-            }
-        });
-
     }
 
     @Override

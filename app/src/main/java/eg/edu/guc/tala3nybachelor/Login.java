@@ -84,6 +84,19 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
     @Bind(R.id.login_text) TextView loginText;
     @Bind(R.id.blurred_layout) RelativeLayout blurredLayout;
 	@Bind(R.id.twitter_login_button) TwitterLoginButton loginTwitterButton;
+    @Bind(R.id.first_name_text) TextView firstNameText;
+    @Bind(R.id.last_name_text) TextView lastNameText;
+    @Bind(R.id.user_name_text) TextView userNameText;
+    @Bind(R.id.password_text) TextView passwordText;
+    @Bind(R.id.confirm_password_text) TextView confirmPasswordText;
+    @Bind(R.id.gender_text) TextView genderText;
+    @Bind(R.id.male_text) TextView maleText;
+    @Bind(R.id.female_text) TextView femaleText;
+    @Bind(R.id.dob_text) TextView dobText;
+    @Bind(R.id.country_text) TextView countryText;
+    @Bind(R.id.city_text) TextView cityText;
+    @Bind(R.id.signup_text) TextView signupText;
+
 
     private Animation slideTop;
     private Animation slideBottom;
@@ -117,7 +130,20 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
         registerText.setTypeface(light);
         username.setTypeface(light);
         password.setTypeface(light);
-        loginText.setTypeface(bold);
+        loginText.setTypeface(light);
+        firstNameText.setTypeface(light);
+        lastNameText.setTypeface(light);
+        userNameText.setTypeface(light);
+        passwordText.setTypeface(light);
+        confirmPasswordText.setTypeface(light);
+        genderText.setTypeface(light);
+        maleText.setTypeface(light);
+        femaleText.setTypeface(light);
+        countryText.setTypeface(light);
+        cityText.setTypeface(light);
+        signupText.setTypeface(light);
+        dobText.setTypeface(light);
+
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -256,7 +282,7 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
         });
 
         Picasso.with(this)
-                .load(R.drawable.twitter_logo_blue)
+                .load(R.drawable.twitter)
                 .fit()
                 .centerCrop()
                 .into(twitterLogin, new Callback() {
@@ -279,7 +305,7 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
                 .into(signinPicture);*/
 
         Picasso.with(this)
-                .load(R.drawable.facebook_logo)
+                .load(R.drawable.facebook_logo1)
                 .fit()
                 .centerCrop()
                 .into(facebookLogin);
