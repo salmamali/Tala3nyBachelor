@@ -135,7 +135,7 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
                 break;
 
             case R.id.profile_options_friends_icon:
-                Toast.makeText(this, "you pressed friends icon", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, FriendsActivity.class));
                 //TODO: Launch friends activity!
                 break;
 

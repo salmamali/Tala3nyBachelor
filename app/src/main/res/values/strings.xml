@@ -12,4 +12,5 @@
     <string name="facebook_app_id">803801309750598</string>
     <string name="title_activity_post">Post</string>
     <string name="post_comment_text">COMMENT</string>
+    <string name="title_activity_friends">FriendsActivity</string>
 </resources>
