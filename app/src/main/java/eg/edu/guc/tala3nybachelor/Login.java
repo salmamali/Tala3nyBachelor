@@ -3,7 +3,10 @@ package eg.edu.guc.tala3nybachelor;
 import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,13 +33,26 @@ import com.facebook.login.LoginResult;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterApiClient;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.core.models.Tweet;
+import com.twitter.sdk.android.core.services.StatusesService;
 
+import eg.edu.guc.tala3nybachelor.utilities.BlurBuilder;
+import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -44,6 +60,10 @@ import eg.edu.guc.tala3nybachelor.adapter.LoginSpinnerAdapter;
 
 
 public class Login extends FullScreenActivity implements Animation.AnimationListener{
+
+	// Note: Your consumer key and secret should be obfuscated in your source code before shipping.
+    private static final String TWITTER_KEY = "BYXReGFLPIJy9vmkT3Y3ao4e3";
+    private static final String TWITTER_SECRET = "GaOW2g3unWQzIhs6zdx0MvV0SlXLlo0HghDJMWyplf1M9opVxi";
 
     private CallbackManager callbackManager;
 
@@ -61,15 +81,22 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
     @Bind(R.id.facebook_login) ImageView facebookLogin;
     @Bind(R.id.twitter_login) ImageView twitterLogin;
     @Bind(R.id.signin_picture) ImageView signinPicture;
+    @Bind(R.id.login_text) TextView loginText;
+    @Bind(R.id.blurred_layout) RelativeLayout blurredLayout;
+	@Bind(R.id.twitter_login_button) TwitterLoginButton loginTwitterButton;
 
     private Animation slideTop;
     private Animation slideBottom;
     private SharedPreferences sharedPreferences;
+    private String fullName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new Twitter(authConfig));
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         sharedPreferences = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE);
@@ -82,6 +109,15 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
         slideTop.setAnimationListener(this);
         slideBottom = AnimationUtils.loadAnimation(this, R.anim.slide_top_bottom);
         slideBottom.setAnimationListener(this);
+
+        Typeface light=Typeface.createFromAsset(getAssets(),"fonts/montserrat-light.otf");
+
+
+        Typeface bold=Typeface.createFromAsset(getAssets(),"fonts/montserrat-bold.otf");
+        registerText.setTypeface(light);
+        username.setTypeface(light);
+        password.setTypeface(light);
+        loginText.setTypeface(bold);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +137,48 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
             }
         });
 
+
+        loginTwitterButton.setCallback(new com.twitter.sdk.android.core.Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                // The TwitterSession is also available through:
+                // Twitter.getInstance().core.getSessionManager().getActiveSession()
+                TwitterSession session = result.data;
+                // TODO: Remove toast and use the TwitterSession's userID
+                // with your app's user model
+                String msg = session.getUserName();
+                //final String username;
+               // Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+               // String name = jsonObject.getString("first_name") + "." + jsonObject.getString("last_name");
+                TwitterApiClient twitterApiClient = TwitterCore.getInstance().getApiClient();
+                StatusesService statusesService = twitterApiClient.getStatusesService();
+                statusesService.show(session.getUserId(), null, null, null, new com.twitter.sdk.android.core.Callback<Tweet>() {
+                    @Override
+                    public void success(Result<Tweet> result) {
+                        Tweet result1 = result.data;
+                        fullName = result1.user.name;
+                    }
+
+                    @Override
+                    public void failure(TwitterException e) {
+
+                    }
+                });
+                sharedPreferences.edit().putString("username", msg).apply();
+                Intent i = new Intent(Login.this, Profile.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                Log.d("TwitterKit", "Login with Twitter failure", exception);
+            }
+        });
+
+
+
+
         registerText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,6 +187,12 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
                 transition.enableTransitionType(LayoutTransition.DISAPPEARING);
                 loginLayout.setLayoutTransition(transition);
                 selectView(true);
+
+                final View content = findViewById(android.R.id.content);
+                Bitmap image = BlurBuilder.blur(content);
+                blurredLayout.setBackground(new BitmapDrawable(getResources(), image));
+                blurredLayout.startAnimation(slideTop);
+
                 registerLayout.startAnimation(slideTop);
                 registerLayout.setVisibility(View.VISIBLE);
                 registerLayout.setOverScrollMode(View.OVER_SCROLL_NEVER);
@@ -243,12 +327,20 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
             }
         });
 
+        twitterLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginTwitterButton.performClick();
+            }
+        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+        loginTwitterButton.onActivityResult(requestCode, resultCode, data);
+
     }
 
     @Override
@@ -265,11 +357,14 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
         AppEventsLogger.deactivateApp(this);
     }
 
+
     @Override
     public void onBackPressed() {
         if (registerLayout.getVisibility() == View.VISIBLE) {
             registerLayout.startAnimation(slideBottom);
             registerLayout.setVisibility(View.GONE);
+            blurredLayout.setBackgroundResource(android.R.color.transparent);
+            blurredLayout.startAnimation(slideBottom);
             selectView(false);
         } else {
             super.onBackPressed();
