@@ -19,12 +19,14 @@ android {
     compileSdkVersion 22
     buildToolsVersion '23.0.1'
 
+
     defaultConfig {
         applicationId "eg.edu.guc.tala3nybachelor"
         minSdkVersion 19
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+        renderscriptSupportModeEnabled true
     }
     buildTypes {
         release {

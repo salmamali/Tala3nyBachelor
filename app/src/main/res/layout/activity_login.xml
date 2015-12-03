@@ -10,11 +10,10 @@
         android:id="@+id/signin_picture"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-<<<<<<< HEAD
         android:background="@drawable/uni5"/>
-=======
+
         />
->>>>>>> origin/master
+
 
     <LinearLayout
         android:id="@+id/login_layout"
@@ -113,6 +112,11 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/blurred_layout"/>
 
     <ScrollView
         android:id="@+id/register_layout"

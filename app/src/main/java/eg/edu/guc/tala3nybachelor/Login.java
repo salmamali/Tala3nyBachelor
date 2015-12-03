@@ -3,8 +3,10 @@ package eg.edu.guc.tala3nybachelor;
 import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -42,6 +44,7 @@ import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.services.StatusesService;
 
+import eg.edu.guc.tala3nybachelor.utilities.BlurBuilder;
 import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,7 +82,7 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
     @Bind(R.id.twitter_login) ImageView twitterLogin;
     @Bind(R.id.signin_picture) ImageView signinPicture;
     @Bind(R.id.login_text) TextView loginText;
-
+    @Bind(R.id.blurred_layout) RelativeLayout blurredLayout;
 	@Bind(R.id.twitter_login_button) TwitterLoginButton loginTwitterButton;
 
     private Animation slideTop;
@@ -184,6 +187,12 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
                 transition.enableTransitionType(LayoutTransition.DISAPPEARING);
                 loginLayout.setLayoutTransition(transition);
                 selectView(true);
+
+                final View content = findViewById(android.R.id.content);
+                Bitmap image = BlurBuilder.blur(content);
+                blurredLayout.setBackground(new BitmapDrawable(getResources(), image));
+                blurredLayout.startAnimation(slideTop);
+
                 registerLayout.startAnimation(slideTop);
                 registerLayout.setVisibility(View.VISIBLE);
                 registerLayout.setOverScrollMode(View.OVER_SCROLL_NEVER);
@@ -354,6 +363,8 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
         if (registerLayout.getVisibility() == View.VISIBLE) {
             registerLayout.startAnimation(slideBottom);
             registerLayout.setVisibility(View.GONE);
+            blurredLayout.setBackgroundResource(android.R.color.transparent);
+            blurredLayout.startAnimation(slideBottom);
             selectView(false);
         } else {
             super.onBackPressed();
