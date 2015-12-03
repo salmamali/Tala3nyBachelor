@@ -16,6 +16,7 @@ import eg.edu.guc.tala3nybachelor.model.Post;
 /**
  * Created by TarekElBeih on 28/11/15.
  */
+
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
     private ArrayList<Post> posts;
 
@@ -33,10 +34,22 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         Post singlePost = posts.get(position);
 
-        holder.txtBody.setText(singlePost.getBody());
-        holder.txtCommentsCount.setText(singlePost.getComments() + " comments");
-        holder.txtLikesCount.setText(singlePost.getLikes() + " likes");
-        holder.txtTimeStamp.setText(singlePost.getTimestamp() + "mins");
+        if(singlePost.getBody() != null)
+            holder.txtBody.setText(singlePost.getBody());
+        if(singlePost.getComments() != -1)
+            holder.txtCommentsCount.setText(singlePost.getComments() + " comments");
+        if(singlePost.getLikes() != -1)
+            holder.txtLikesCount.setText(singlePost.getLikes() + " likes");
+
+        int time = singlePost.getTimestamp();
+        if(time != -1) {
+            if(time == 0) {
+                holder.txtTimeStamp.setText("just now");
+            } else {
+                holder.txtTimeStamp.setText(time + "mins");
+            }
+        }
+
     }
 
     @Override

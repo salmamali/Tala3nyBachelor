@@ -4,12 +4,7 @@ import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -23,6 +18,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -39,8 +43,12 @@ import com.twitter.sdk.android.core.services.StatusesService;
 
 import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -49,11 +57,11 @@ import eg.edu.guc.tala3nybachelor.adapter.LoginSpinnerAdapter;
 
 public class Login extends FullScreenActivity implements Animation.AnimationListener{
 
-    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
+	// Note: Your consumer key and secret should be obfuscated in your source code before shipping.
     private static final String TWITTER_KEY = "BYXReGFLPIJy9vmkT3Y3ao4e3";
     private static final String TWITTER_SECRET = "GaOW2g3unWQzIhs6zdx0MvV0SlXLlo0HghDJMWyplf1M9opVxi";
 
-
+    private CallbackManager callbackManager;
 
     @Bind(R.id.register_text) TextView registerText;
     @Bind(R.id.username_login) EditText username;
@@ -68,20 +76,25 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
     @Bind(R.id.register_button) RelativeLayout registerButton;
     @Bind(R.id.facebook_login) ImageView facebookLogin;
     @Bind(R.id.twitter_login) ImageView twitterLogin;
-    @Bind(R.id.twitter_login_button) TwitterLoginButton loginTwitterButton;
+    @Bind(R.id.signin_picture) ImageView signinPicture;
+	@Bind(R.id.twitter_login_button) TwitterLoginButton loginTwitterButton;
 
     private Animation slideTop;
     private Animation slideBottom;
     private SharedPreferences sharedPreferences;
-    String fullName;
+    private String fullName;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
         sharedPreferences = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE);
+
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
@@ -101,7 +114,7 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
                 if (sUsername.equals("") || sPassword.equals("")) {
                     Toast.makeText(Login.this, "Username or Password cannot be empty", Toast.LENGTH_SHORT).show();
                 } else {
-
+                    sharedPreferences.edit().putString("username", sUsername).apply();
                     Intent i = new Intent(Login.this, Profile.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(i);
@@ -238,6 +251,12 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
                         Log.wtf("salma", "error");
                     }
                 });
+/*
+        Picasso.with(this)
+                .load(R.drawable.uni2)
+                .fit()
+                .centerCrop()
+                .into(signinPicture);*/
 
         Picasso.with(this)
                 .load(R.drawable.facebook_logo)
@@ -245,21 +264,77 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
                 .centerCrop()
                 .into(facebookLogin);
 
+        facebookLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginManager.getInstance().logInWithReadPermissions(Login.this, Arrays.asList("public_profile", "email", "user_friends"));
+            }
+        });
+
+        LoginManager.getInstance().logOut();
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject jsonObject, GraphResponse response) {
+                        try {
+                            String name = jsonObject.getString("first_name") + "." + jsonObject.getString("last_name");
+                            sharedPreferences.edit().putString("username", name).apply();
+                            Intent i = new Intent(Login.this, Profile.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(i);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "first_name,last_name");
+                request.setParameters(parameters);
+                request.executeAsync();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
+
         twitterLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loginTwitterButton.performClick();
             }
         });
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // Make sure that the loginButton hears the result from any
-        // Activity that it triggered.
+        callbackManager.onActivityResult(requestCode, resultCode, data);
         loginTwitterButton.onActivityResult(requestCode, resultCode, data);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        AppEventsLogger.deactivateApp(this);
     }
 
 

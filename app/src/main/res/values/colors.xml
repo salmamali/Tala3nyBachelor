@@ -8,4 +8,6 @@
     <color name="mainColor">#70ccc1</color>
     <color name="profile_separator">#604f747f</color>
     <color name="black_overlay">#66000000</color>
+
+    <color name="separator_color">#30000000</color>
 </resources>

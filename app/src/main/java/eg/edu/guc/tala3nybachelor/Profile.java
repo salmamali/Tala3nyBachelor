@@ -1,22 +1,27 @@
 package eg.edu.guc.tala3nybachelor;
 
-
+import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.widget.IconTextView;
 import com.squareup.picasso.Callback;
@@ -31,9 +36,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import eg.edu.guc.tala3nybachelor.adapter.PostsAdapter;
+import eg.edu.guc.tala3nybachelor.model.Comment;
 import eg.edu.guc.tala3nybachelor.model.Post;
 
-public class Profile extends FullScreenActivity {
+public class Profile extends FullScreenActivity implements Animation.AnimationListener{
 
     private static final String PROFILE_IMAGE = "http://s-media-cache-ak0.pinimg.com/736x/8b/1e/f5/8b1ef57d12bb0fa2518b9111dab97809.jpg";
 
@@ -42,14 +48,27 @@ public class Profile extends FullScreenActivity {
 
     @Bind(R.id.profile_image_holder) ImageView imgHolder;
 
+    @Bind(R.id.profile_options_layout) LinearLayout profileOptionsLayout;
+    @Bind(R.id.profile_post_edit_layout) LinearLayout postEditLayout;
+    @Bind(R.id.profile_post_edit_text) EditText postEditText;
+
     //icons
     @Bind(R.id.profile_options_post_icon) IconTextView icnPost;
     @Bind(R.id.profile_options_messages_icon) IconTextView icnMessage;
     @Bind(R.id.profile_options_friends_icon) IconTextView icnFriends;
     @Bind(R.id.profile_options_menu_icon) IconTextView icnMenu;
     @Bind(R.id.profile_image_refresh) IconTextView imgReload;
+    @Bind(R.id.drawer_logout_icon) IconTextView imgLogout;
+    @Bind(R.id.drawer_info_icon) IconTextView imgInfo;
 
     @Bind(R.id.profile_posts_list_view) RecyclerView postsList;
+    @Bind(R.id.settings_drawer) DrawerLayout settingsDrawer;
+
+    private SharedPreferences sharedPreferences;
+    private String name;
+    private Animation slideRight, slideLeft;
+    private PostsAdapter adapter;
+    private ArrayList<Post> posts;
 
     private SharedPreferences sharedPreferences;
 
@@ -63,23 +82,27 @@ public class Profile extends FullScreenActivity {
 
         ButterKnife.bind(this);
         Picasso.with(this).setLoggingEnabled(true);
+        sharedPreferences = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE);
 
-        Iconify.addIcons(icnPost, icnMessage, icnFriends, icnMenu, imgReload);
-        String username = sharedPreferences.getString("username", "");
+        Iconify.addIcons(icnPost, icnMessage, icnFriends, icnMenu, imgReload, imgLogout, imgInfo);
+        slideRight = AnimationUtils.loadAnimation(this, R.anim.slide_left_right);
+        slideRight.setAnimationListener(this);
+        slideLeft = AnimationUtils.loadAnimation(this, R.anim.slide_right_left);
+        slideLeft.setAnimationListener(this);
 
-        txtName.setText(username);
+        name = sharedPreferences.getString("username", "Tarek ElBeih");
+        txtName.setText(name);
         txtName.setTextColor(Color.argb(200, 255, 255, 255));
 
         DisplayMetrics dm = getResources().getDisplayMetrics();
         updateProfileImage(dm);
 
-        ArrayList<Post> posts = new ArrayList<>();
+        posts = new ArrayList<>();
         posts.add(new Post("I found this great topic.", 3, 4, 27));
         posts.add(new Post("I need help finding a place to stay in Stuttgart!", 23, 0, 3));
         posts.add(new Post("For those interested in topics about machine learning and AI please comment or contact me", 41, 19, 34));
 
-
-        PostsAdapter adapter = new PostsAdapter(posts);
+        adapter = new PostsAdapter(posts);
         postsList.setAdapter(adapter);
         postsList.setOverScrollMode(View.OVER_SCROLL_NEVER);
         postsList.setVerticalScrollBarEnabled(false);
@@ -92,27 +115,81 @@ public class Profile extends FullScreenActivity {
     public void onClick(View view) {
         switch(view.getId()) {
             case R.id.profile_options_post_icon:
-                Toast.makeText(this, "you pressed post icon", Toast.LENGTH_SHORT).show();
-                //TODO: post something
+                LayoutTransition transition = new LayoutTransition();
+                if(postEditLayout.getVisibility() == View.GONE) {
+                    icnMenu.setVisibility(View.GONE);
+                    icnMessage.setVisibility(View.GONE);
+                    icnFriends.setVisibility(View.GONE);
+                    transition.enableTransitionType(LayoutTransition.APPEARING);
+                    profileOptionsLayout.setLayoutTransition(transition);
+                    profileOptionsLayout.startAnimation(slideRight);
+                } else {
+                    postEditLayout.setVisibility(View.GONE);
+                    transition.enableTransitionType(LayoutTransition.DISAPPEARING);
+                    profileOptionsLayout.setLayoutTransition(transition);
+                    profileOptionsLayout.startAnimation(slideLeft);
+                    sendPost();
+                }
                 break;
 
             case R.id.profile_options_messages_icon:
-                Toast.makeText(this, "you pressed messages icon", Toast.LENGTH_SHORT).show();
-                //TODO: open messages
+                Intent messages = new Intent(Profile.this, Messages.class);
+                startActivity(messages);
                 break;
 
             case R.id.profile_options_friends_icon:
                 Toast.makeText(this, "you pressed friends icon", Toast.LENGTH_SHORT).show();
-                //TODO: show friends
+                //TODO: Launch friends activity!
                 break;
 
             case R.id.profile_options_menu_icon:
-                Toast.makeText(this, "you pressed menu icon", Toast.LENGTH_SHORT).show();
-                //TODO: open menu
+                settingsDrawer.openDrawer(GravityCompat.END);
+                break;
+
+            case R.id.drawer_logout_icon:
+                Intent logout = new Intent(this, Login.class);
+                startActivity(logout);
+                break;
+
+            case R.id.drawer_info_icon:
+                //TODO: Launch info activity!
+                break;
+
+            case R.id.post_cell_likes_count:
+            case R.id.post_cell_comments_count:
+                launchPostActivity();
                 break;
 
             default:
         }
+    }
+
+    private void sendPost() {
+        String postBody = postEditText.getText().toString();
+        if(!postBody.isEmpty()) {
+            postEditText.setText("");
+            Post p = new Post(postBody, 0, 0, 0);
+            posts.add(p);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    private void launchPostActivity() {
+        Intent post = new Intent(this, PostActivity.class);
+        post.putExtra("post-owner", name);
+        post.putExtra("post-body", "I found this great topic.");
+        post.putExtra("post-time", "27mins");
+
+        ArrayList<Comment> comments = new ArrayList<>();
+        comments.add(new Comment("Salma", "how can I contact you?", 12));
+        comments.add(new Comment(name, "send me an email", 10));
+        comments.add(new Comment("Salma", "ok, thanks!", 6));
+
+        Gson gson = new Gson();
+        String jsonComments = gson.toJson(comments);
+        post.putExtra("comments", jsonComments);
+
+        startActivity(post);
     }
 
     private void updateProfileImage(final DisplayMetrics dm){
@@ -134,28 +211,6 @@ public class Profile extends FullScreenActivity {
                     }
                 });
 
-        ArrayList<Post> posts = new ArrayList<>();
-        posts.add(new Post("I found this great topic!", 3, 4, 27));
-        posts.add(new Post("I need help finding a place to stay in Stuttgart", 23, 0, 3));
-        posts.add(new Post("For those interested in topics about machine learning and AI please comment or contact me", 41, 19, 34));
-
-
-        PostsAdapter adapter = new PostsAdapter(posts);
-        postsList.setAdapter(adapter);
-        postsList.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        postsList.setHorizontalScrollBarEnabled(false);
-
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        postsList.setLayoutManager(llm);
-
-        icnMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Profile.this, Messages.class);
-                startActivity(i);
-            }
-        });
         imgReload.setVisibility(View.VISIBLE);
         imgReload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,6 +220,30 @@ public class Profile extends FullScreenActivity {
                 updateProfileImage(dm);
             }
         });
+
+    }
+
+    @Override
+    public void onAnimationStart(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+        if(animation == slideRight) {
+            postEditLayout.setVisibility(View.VISIBLE);
+            postEditLayout.setOverScrollMode(View.OVER_SCROLL_NEVER);
+            postEditLayout.setVerticalScrollBarEnabled(false);
+            postEditText.requestFocus();
+        } else if(animation == slideLeft) {
+            icnMenu.setVisibility(View.VISIBLE);
+            icnMessage.setVisibility(View.VISIBLE);
+            icnFriends.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
 
     }
 }
