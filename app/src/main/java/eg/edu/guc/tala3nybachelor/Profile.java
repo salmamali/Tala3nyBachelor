@@ -3,7 +3,6 @@ package eg.edu.guc.tala3nybachelor;
 import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
@@ -26,9 +25,6 @@ import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.widget.IconTextView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-import com.twitter.sdk.android.core.TwitterApiClient;
-import com.twitter.sdk.android.core.TwitterCore;
-import com.twitter.sdk.android.core.services.StatusesService;
 
 import java.util.ArrayList;
 
@@ -98,7 +94,7 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         updateProfileImage(dm);
 
         posts = new ArrayList<>();
-        posts.add(new Post("I found this great topic.", 3, 4, 27));
+        posts.add(new Post("I found this great topic.", 27, 3, 9));
         posts.add(new Post("I need help finding a place to stay in Stuttgart!", 23, 0, 3));
         posts.add(new Post("For those interested in topics about machine learning and AI please comment or contact me", 41, 19, 34));
 
@@ -112,23 +108,24 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         postsList.setLayoutManager(llm);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        postEditText.setText("");
+        postEditLayout.setVisibility(View.GONE);
+        icnMenu.setVisibility(View.VISIBLE);
+        icnMessage.setVisibility(View.VISIBLE);
+        icnFriends.setVisibility(View.VISIBLE);
+    }
+
     public void onClick(View view) {
         switch(view.getId()) {
             case R.id.profile_options_post_icon:
-                LayoutTransition transition = new LayoutTransition();
                 if(postEditLayout.getVisibility() == View.GONE) {
-                    icnMenu.setVisibility(View.GONE);
-                    icnMessage.setVisibility(View.GONE);
-                    icnFriends.setVisibility(View.GONE);
-                    transition.enableTransitionType(LayoutTransition.APPEARING);
-                    profileOptionsLayout.setLayoutTransition(transition);
-                    profileOptionsLayout.startAnimation(slideRight);
+                    showAddPost();
                 } else {
-                    postEditLayout.setVisibility(View.GONE);
-                    transition.enableTransitionType(LayoutTransition.DISAPPEARING);
-                    profileOptionsLayout.setLayoutTransition(transition);
-                    profileOptionsLayout.startAnimation(slideLeft);
-                    sendPost();
+                    hideAddPost();
                 }
                 break;
 
@@ -162,6 +159,25 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
 
             default:
         }
+    }
+
+    private void hideAddPost() {
+        LayoutTransition transition = new LayoutTransition();
+        postEditLayout.setVisibility(View.GONE);
+        transition.enableTransitionType(LayoutTransition.DISAPPEARING);
+        profileOptionsLayout.setLayoutTransition(transition);
+        profileOptionsLayout.startAnimation(slideLeft);
+        sendPost();
+    }
+
+    private void showAddPost() {
+        LayoutTransition transition = new LayoutTransition();
+        icnMenu.setVisibility(View.GONE);
+        icnMessage.setVisibility(View.GONE);
+        icnFriends.setVisibility(View.GONE);
+        transition.enableTransitionType(LayoutTransition.APPEARING);
+        profileOptionsLayout.setLayoutTransition(transition);
+        profileOptionsLayout.startAnimation(slideRight);
     }
 
     private void sendPost() {
