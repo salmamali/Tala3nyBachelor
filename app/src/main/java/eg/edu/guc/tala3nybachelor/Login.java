@@ -9,9 +9,11 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -97,12 +99,10 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
     @Bind(R.id.city_text) TextView cityText;
     @Bind(R.id.signup_text) TextView signupText;
 
-
     private Animation slideTop;
     private Animation slideBottom;
     private SharedPreferences sharedPreferences;
     private String fullName;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,22 +144,33 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
         signupText.setTypeface(light);
         dobText.setTypeface(light);
 
+        username.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    password.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_DONE) {
+                    performLogin();
+                    return true;
+                }
+                return false;
+            }
+        });
+
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String sUsername = username.getText().toString();
-                String sPassword = password.getText().toString();
-
-                if (sUsername.equals("") || sPassword.equals("")) {
-                    Toast.makeText(Login.this, "Username or Password cannot be empty", Toast.LENGTH_SHORT).show();
-                } else {
-                    sharedPreferences.edit().putString("username", sUsername).apply();
-                    Intent i = new Intent(Login.this, Profile.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(i);
-
-                }
+                performLogin();
             }
         });
 
@@ -359,6 +370,21 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
                 loginTwitterButton.performClick();
             }
         });
+    }
+
+    private void performLogin() {
+        String sUsername = username.getText().toString();
+        String sPassword = password.getText().toString();
+
+        if (sUsername.equals("") || sPassword.equals("")) {
+            Toast.makeText(Login.this, "Username or Password cannot be empty", Toast.LENGTH_SHORT).show();
+        } else {
+            sharedPreferences.edit().putString("username", sUsername).apply();
+            Intent i = new Intent(Login.this, Profile.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
+
+        }
     }
 
     @Override
