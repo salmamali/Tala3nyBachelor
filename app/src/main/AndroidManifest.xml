@@ -10,6 +10,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="93d7dbed489f4abab9350112c1ade8a299a9b2ef" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -35,6 +39,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
         <activity
             android:name=".Profile"
             android:label="@string/title_activity_profile"
@@ -42,11 +47,12 @@
         <activity
             android:name=".Messages"
             android:label="@string/title_activity_messages"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
+            
         <activity
             android:name=".PostActivity"
             android:label="@string/title_activity_post"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

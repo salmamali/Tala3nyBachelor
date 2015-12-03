@@ -3,6 +3,7 @@ package eg.edu.guc.tala3nybachelor;
 import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
@@ -25,6 +26,9 @@ import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.widget.IconTextView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.twitter.sdk.android.core.TwitterApiClient;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.services.StatusesService;
 
 import java.util.ArrayList;
 
@@ -66,10 +70,15 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
     private PostsAdapter adapter;
     private ArrayList<Post> posts;
 
+    private SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        sharedPreferences = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE);
+
 
         ButterKnife.bind(this);
         Picasso.with(this).setLoggingEnabled(true);
