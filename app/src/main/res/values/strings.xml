@@ -1,15 +1,16 @@
 <resources>
     <string name="app_name">Tala3ny Bachelor</string>
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="title_activity_login">Login</string>
     <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_post">Post</string>
+    <string name="title_activity_feed">Feed</string>
 
-    <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="create_account"> <u>Create a new account</u></string>
     <string name="title_activity_messages">Messages</string>
 
     <string name="facebook_app_id">803801309750598</string>
-    <string name="title_activity_post">Post</string>
     <string name="post_comment_text">COMMENT</string>
 </resources>

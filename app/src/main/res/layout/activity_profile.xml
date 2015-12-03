@@ -172,11 +172,11 @@
         android:layout_marginTop="150dp">
 
         <com.joanzapata.iconify.widget.IconTextView
-            android:id="@+id/drawer_info_icon"
+            android:id="@+id/drawer_feed_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="INFO {fa-info-circle}"
+            android:text="FEED {fa-clock-o}"
             android:textSize="@dimen/profile_icon_size"
             android:textColor="@color/colorAccent"
             android:textStyle="bold"
@@ -192,6 +192,31 @@
             android:layout_width="140dp"
             android:layout_height="1dp"
             android:background="#30000000"
+            android:layout_below="@+id/drawer_feed_icon"
+            />
+
+        <com.joanzapata.iconify.widget.IconTextView
+            android:id="@+id/drawer_info_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="INFO {fa-info-circle}"
+            android:textSize="@dimen/profile_icon_size"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"
+            android:onClick="onClick"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="10dp"
+            android:layout_below="@+id/drawer_separator_1"
+            />
+
+        <View
+            android:id="@+id/drawer_separator_2"
+            android:layout_width="140dp"
+            android:layout_height="1dp"
+            android:background="#30000000"
             android:layout_below="@+id/drawer_info_icon"
             />
 
@@ -200,7 +225,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/drawer_separator_1"
+            android:layout_below="@+id/drawer_separator_2"
             android:text="LOGOUT {fa-power-off}"
             android:textSize="@dimen/profile_icon_size"
             android:textColor="@color/colorAccent"
