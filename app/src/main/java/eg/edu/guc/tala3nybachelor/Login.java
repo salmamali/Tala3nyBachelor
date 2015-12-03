@@ -256,7 +256,7 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
         });
 
         Picasso.with(this)
-                .load(R.drawable.twitter_logo_blue)
+                .load(R.drawable.twitter)
                 .fit()
                 .centerCrop()
                 .into(twitterLogin, new Callback() {
@@ -279,7 +279,7 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
                 .into(signinPicture);*/
 
         Picasso.with(this)
-                .load(R.drawable.facebook_logo)
+                .load(R.drawable.facebook_logo1)
                 .fit()
                 .centerCrop()
                 .into(facebookLogin);
