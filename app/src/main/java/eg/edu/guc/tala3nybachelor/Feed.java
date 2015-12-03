@@ -2,10 +2,12 @@ package eg.edu.guc.tala3nybachelor;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -20,6 +22,7 @@ import eg.edu.guc.tala3nybachelor.model.Post;
 public class Feed extends FullScreenActivity {
 
     @Bind(R.id.feed_posts_list) RecyclerView feedList;
+    @Bind(R.id.feed_title) TextView feedTitle;
 
     private SharedPreferences sharedPreferences;
     private ArrayList<Post> posts;
@@ -40,10 +43,13 @@ public class Feed extends FullScreenActivity {
         posts.add(new Post("I need help finding a place to stay in Stuttgart!", 23, 0, 3));
         posts.add(new Post("For those interested in topics about machine learning and AI please comment or contact me", 41, 19, 34));
 
-        adapter = new PostsAdapter(posts);
+        adapter = new PostsAdapter(this, posts);
         feedList.setAdapter(adapter);
         feedList.setOverScrollMode(View.OVER_SCROLL_NEVER);
         feedList.setVerticalScrollBarEnabled(false);
+
+        Typeface light=Typeface.createFromAsset(getAssets(),"fonts/montserrat-light.otf");
+        feedTitle.setTypeface(light);
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);

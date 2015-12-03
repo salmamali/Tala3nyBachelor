@@ -123,6 +123,7 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         icnFriends.setTypeface(light);
         imgLogout.setTypeface(light);
         imgInfo.setTypeface(light);
+
         imgFeed.setTypeface(light);
 
         name = sharedPreferences.getString("username", "");
@@ -137,7 +138,7 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         posts.add(new Post("I need help finding a place to stay in Stuttgart!", 23, 0, 3));
         posts.add(new Post("For those interested in topics about machine learning and AI please comment or contact me", 41, 19, 34));
 
-        adapter = new PostsAdapter(posts);
+        adapter = new PostsAdapter(this,posts);
         postsList.setAdapter(adapter);
         postsList.setOverScrollMode(View.OVER_SCROLL_NEVER);
         postsList.setVerticalScrollBarEnabled(false);

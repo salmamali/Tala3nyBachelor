@@ -23,6 +23,7 @@
         android:orientation="vertical"
         android:visibility="visible">
 
+
         <EditText
             android:id="@+id/username_login"
             android:hint="Username"
