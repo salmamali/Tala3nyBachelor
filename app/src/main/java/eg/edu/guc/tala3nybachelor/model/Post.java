@@ -7,13 +7,15 @@ package eg.edu.guc.tala3nybachelor.model;
 public class Post {
     private String body;
     private int timestamp;
-    private int comments;
+    private int commentCount;
     private int likes;
+    private String created_at;
+    private String updated_at;
 
     public Post(String body, int timestamp, int comments, int likes) {
         this.body = body;
         this.timestamp = timestamp;
-        this.comments = comments;
+        this.commentCount = comments;
         this.likes = likes;
     }
 
@@ -26,7 +28,7 @@ public class Post {
     }
 
     public int getComments() {
-        return comments;
+        return commentCount;
     }
 
     public int getLikes() {
