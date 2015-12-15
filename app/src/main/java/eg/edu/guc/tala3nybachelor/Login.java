@@ -46,6 +46,10 @@ import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.services.StatusesService;
 
+import eg.edu.guc.tala3nybachelor.controller.Controller;
+import eg.edu.guc.tala3nybachelor.model.LoginData;
+import eg.edu.guc.tala3nybachelor.model.Session;
+import eg.edu.guc.tala3nybachelor.singleton.RetrofitSingleton;
 import eg.edu.guc.tala3nybachelor.utilities.BlurBuilder;
 import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
@@ -59,6 +63,8 @@ import org.json.JSONObject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import eg.edu.guc.tala3nybachelor.adapter.LoginSpinnerAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class Login extends FullScreenActivity implements Animation.AnimationListener{
@@ -379,11 +385,24 @@ public class Login extends FullScreenActivity implements Animation.AnimationList
         if (sUsername.equals("") || sPassword.equals("")) {
             Toast.makeText(Login.this, "Username or Password cannot be empty", Toast.LENGTH_SHORT).show();
         } else {
-            sharedPreferences.edit().putString("username", sUsername).apply();
-            Intent i = new Intent(Login.this, Profile.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(i);
+            Controller.Login loginRequest = RetrofitSingleton.getInstance().create(Controller.Login.class);
+            loginRequest.login(new LoginData(sUsername, sPassword), new retrofit.Callback<Session>() {
+                @Override
+                public void success(Session session, Response response) {
+                    sharedPreferences.edit().putString("accessToken", session.getToken()).apply();
+                    sharedPreferences.edit().putString("userId", session.getId() + "").apply();
+                    sharedPreferences.edit().putString("userName", session.getName()).apply();
+                    sharedPreferences.edit().putString("userEmail", session.getEmail()).apply();
+                    Intent i = new Intent(Login.this, Profile.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(i);
+                }
 
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.d("Login Error", error.getMessage());
+                }
+            });
         }
     }
 

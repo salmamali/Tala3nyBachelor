@@ -25,7 +25,6 @@ import eg.edu.guc.tala3nybachelor.model.Friend;
  */
 public class FriendsAdapter extends ArrayAdapter<Friend> {
 
-
     private Context context;
     private ArrayList<Friend> friends;
     private ArrayList<Friend> originalFriend;
