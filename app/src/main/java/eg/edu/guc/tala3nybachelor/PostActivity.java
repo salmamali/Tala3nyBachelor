@@ -2,6 +2,7 @@ package eg.edu.guc.tala3nybachelor;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -46,6 +47,8 @@ public class PostActivity extends FullScreenActivity {
     private int postId;
     private ArrayList<Comment> comments;
     private CommentsAdapter adapter;
+    private String accessToken;
+    private SharedPreferences sharedPreferences;
 
 
     @Override
@@ -53,6 +56,8 @@ public class PostActivity extends FullScreenActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
         ButterKnife.bind(this);
+        sharedPreferences = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE);
+        accessToken = sharedPreferences.getString("accessToken", "");
 
 
         Typeface light=Typeface.createFromAsset(getAssets(),"fonts/montserrat-light.otf");
@@ -88,7 +93,7 @@ public class PostActivity extends FullScreenActivity {
                 Log.wtf("salma", "post id: " + postId);
                 SetData data = new SetData(editComment.getText().toString(), postId, 1, 1, null, null);
                 Log.wtf("salma", "text: " + data.text+ " postId: " + data.postId + " post_id: "+ data.post_id + " user_id: " + data.user_id);
-                addComment("33ff8cff9c46b099e34020ababb378b8", data);
+                addComment(accessToken, data);
             }
         });
     }

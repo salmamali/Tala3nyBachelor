@@ -40,6 +40,7 @@ import eg.edu.guc.tala3nybachelor.controller.Controller;
 import eg.edu.guc.tala3nybachelor.model.Comment;
 import eg.edu.guc.tala3nybachelor.model.Post;
 import eg.edu.guc.tala3nybachelor.model.SetData;
+import eg.edu.guc.tala3nybachelor.model.User;
 import eg.edu.guc.tala3nybachelor.singleton.RetrofitSingleton;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -104,7 +105,8 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
     private int measuredWidth, measuredHeight;
     private PostsAdapter adapter;
     private ArrayList<Post> posts;
-    private int userId;
+    private String userId;
+    private String accessToken;
 
     private SharedPreferences sharedPreferences;
 
@@ -116,6 +118,7 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         ButterKnife.bind(this);
         Picasso.with(this).setLoggingEnabled(true);
         sharedPreferences = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE);
+        accessToken = sharedPreferences.getString("accessToken", "");
 
         slideRight = AnimationUtils.loadAnimation(this, R.anim.slide_left_right);
         slideRight.setAnimationListener(this);
@@ -124,6 +127,15 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         drawerPane.measure(0, 0);
         measuredHeight = drawerPane.getMeasuredHeight();
         measuredWidth = drawerPane.getMeasuredWidth();
+
+        try {
+            boolean notUser = getIntent().getBooleanExtra("notUser", false);
+            if (notUser) {
+
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
         Typeface light = Typeface.createFromAsset(getAssets(), "fonts/montserrat-light.otf");
 
@@ -144,7 +156,7 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
 
 
 
-        userId = sharedPreferences.getInt("userId", 1);
+        userId = sharedPreferences.getString("userId", "1");
         name = sharedPreferences.getString("userName", "");
         txtName.setText(name);
         txtName.setTextColor(Color.argb(200, 255, 255, 255));
@@ -268,8 +280,8 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         String postBody = postEditText.getText().toString();
         if (!postBody.isEmpty()) {
             postEditText.setText("");
-            SetData data = new SetData(null, null, null, null, postBody, userId);
-            addPost("33ff8cff9c46b099e34020ababb378b8", data);
+            SetData data = new SetData(null, null, null, null, postBody, Integer.parseInt(userId));
+            addPost(accessToken, data);
 
         }
     }
@@ -291,6 +303,8 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         });
 
     }
+
+
 
     public void getProfile(Integer dest, final Context context) {
         Controller.getProfilePosts retr = RetrofitSingleton.getInstance().create(Controller.getProfilePosts.class);
