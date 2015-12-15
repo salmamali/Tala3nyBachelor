@@ -1,5 +1,7 @@
 package eg.edu.guc.tala3nybachelor;
 
+import java.util.ArrayList;
+
 import eg.edu.guc.tala3nybachelor.controller.Controller;
 import eg.edu.guc.tala3nybachelor.model.Post;
 import eg.edu.guc.tala3nybachelor.model.User;
@@ -13,7 +15,7 @@ import retrofit.client.Response;
  */
 public class APICalls {
 
-    public void getPosts(Integer id) {
+    public void getPost(Integer id) {
 
         Controller.getPost retr = RetrofitSingleton.getInstance().create(Controller.getPost.class);
         retr.get_post(id, new Callback<Post>() {
@@ -36,6 +38,21 @@ public class APICalls {
         retr.get_user(id, new Callback<User>() {
             @Override
             public void success(User user, Response response) {
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    public void getPosts() {
+        Controller.getPosts retr = RetrofitSingleton.getInstance().create(Controller.getPosts.class);
+        retr.get_posts(new Callback<ArrayList<Post>>() {
+            @Override
+            public void success(ArrayList<Post> posts, Response response) {
 
             }
 

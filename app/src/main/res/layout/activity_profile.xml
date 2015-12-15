@@ -116,7 +116,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="FRIENDS {fa-group}"
+                android:text="FOLLOWING {fa-group}"
                 android:textSize="@dimen/profile_icon_size"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold"

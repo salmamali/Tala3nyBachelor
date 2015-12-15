@@ -1,5 +1,7 @@
 package eg.edu.guc.tala3nybachelor.controller;
 
+import java.util.ArrayList;
+
 import eg.edu.guc.tala3nybachelor.model.Post;
 import eg.edu.guc.tala3nybachelor.model.SetData;
 import eg.edu.guc.tala3nybachelor.model.User;
@@ -35,5 +37,9 @@ public class Controller {
 
 
 
+    }
+    public interface getPosts {
+        @GET("/api/posts/")
+        void get_posts(Callback <ArrayList<Post>> callback);
     }
 }
