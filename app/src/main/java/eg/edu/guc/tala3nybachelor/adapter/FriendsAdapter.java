@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.joanzapata.iconify.Iconify;
@@ -34,8 +35,10 @@ public class FriendsAdapter extends ArrayAdapter<Friend> {
     ImageView friendImage;
     @Bind(R.id.friend_name)
     TextView friendName;
-    @Bind(R.id.add_friend) TextView addFriend;
+    @Bind(R.id.remove_layout)
+    RelativeLayout removeLayout;
     @Bind(R.id.remove_friend) TextView removeFriend;
+
 
     public FriendsAdapter(Context context, ArrayList<Friend> friends) {
         super(context, R.layout.friends_cell, friends);
@@ -66,27 +69,28 @@ public class FriendsAdapter extends ArrayAdapter<Friend> {
         }
 
         friendName.setText(friends.get(position).getFriend());
-        if (friends.get(position).isAccepted()) {
-            addFriend.setVisibility(View.GONE);
-            removeFriend.setVisibility(View.VISIBLE);
-        } else {
-            addFriend.setVisibility(View.VISIBLE);
-            removeFriend.setVisibility(View.GONE);
-        }
 
-        addFriend.setOnClickListener(new View.OnClickListener() {
+
+       /* addFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 friends.get(position).setAccepted(true);
                 notifyDataSetChanged();
             }
-        });
+        });*/
 
         removeFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 friends.get(position).setAccepted(false);
                 notifyDataSetChanged();
+            }
+        });
+
+        removeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
             }
         });
 
