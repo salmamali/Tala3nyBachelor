@@ -135,7 +135,7 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         lastName.setTypeface(light);
 
 
-        name = sharedPreferences.getString("username", "");
+        name = sharedPreferences.getString("userName", "");
         txtName.setText(name);
         txtName.setTextColor(Color.argb(200, 255, 255, 255));
 

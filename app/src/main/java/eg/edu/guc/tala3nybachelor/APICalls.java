@@ -32,21 +32,6 @@ public class APICalls {
 
     }
 
-    public void getUsers(Integer id){
-        Controller.getUser retr = RetrofitSingleton.getInstance().create(Controller.getUser.class);
-
-        retr.get_user(id, new Callback<User>() {
-            @Override
-            public void success(User user, Response response) {
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
-    }
 
     public void getPosts() {
         Controller.getPosts retr = RetrofitSingleton.getInstance().create(Controller.getPosts.class);
