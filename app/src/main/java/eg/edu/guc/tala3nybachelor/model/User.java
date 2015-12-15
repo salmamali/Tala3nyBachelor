@@ -52,4 +52,16 @@ public class User {
     public String getName() {
         return name;
     }
+
+    public String getDate_of_birth() {
+        return date_of_birth;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public String getNationality() {
+        return country;
+    }
 }

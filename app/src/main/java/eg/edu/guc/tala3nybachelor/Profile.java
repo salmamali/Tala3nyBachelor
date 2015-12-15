@@ -40,6 +40,7 @@ import eg.edu.guc.tala3nybachelor.controller.Controller;
 import eg.edu.guc.tala3nybachelor.model.Comment;
 import eg.edu.guc.tala3nybachelor.model.Post;
 import eg.edu.guc.tala3nybachelor.model.SetData;
+import eg.edu.guc.tala3nybachelor.model.User;
 import eg.edu.guc.tala3nybachelor.singleton.RetrofitSingleton;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -97,7 +98,6 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
     RelativeLayout infoLayout;
     @Bind(R.id.personal_info_text) TextView personalInfoText;
     @Bind(R.id.firstname) TextView firstName;
-    @Bind(R.id.lastname) TextView lastName;
 
     private String name;
     private Animation slideRight, slideLeft;
@@ -140,11 +140,10 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         txtGender.setTypeface(light);
         txtNationality.setTypeface(light);
         firstName.setTypeface(light);
-        lastName.setTypeface(light);
 
 
 
-        userId = sharedPreferences.getInt("userId", 1);
+        userId = Integer.parseInt(sharedPreferences.getString("userId", ""));
         name = sharedPreferences.getString("userName", "");
         txtName.setText(name);
         txtName.setTextColor(Color.argb(200, 255, 255, 255));
@@ -161,6 +160,25 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         postsList.setLayoutManager(llm);
+    }
+
+    public void getUser() {
+        Controller.getUser retr = RetrofitSingleton.getInstance().create(Controller.getUser.class);
+        String accessToken = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE).getString("accessToken", "");
+        retr.get_user(accessToken, userId, new retrofit.Callback<User>() {
+            @Override
+            public void success(User user, Response response) {
+                firstName.setText("Name: "+user.getName());
+                txtAge.setText("Date of Birth: "+user.getDate_of_birth());
+                txtGender.setText("Gender: "+user.getGender());
+                txtNationality.setText("Country: "+user.getNationality());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
 
     @Override
@@ -269,7 +287,8 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         if (!postBody.isEmpty()) {
             postEditText.setText("");
             SetData data = new SetData(null, null, null, null, postBody, userId);
-            addPost("33ff8cff9c46b099e34020ababb378b8", data);
+            String accessToken = sharedPreferences.getString("accessToken", "");
+            addPost(accessToken, data);
 
         }
     }
