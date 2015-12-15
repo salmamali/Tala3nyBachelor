@@ -1,6 +1,7 @@
 package eg.edu.guc.tala3nybachelor;
 
 import android.animation.LayoutTransition;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -11,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -34,8 +36,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import eg.edu.guc.tala3nybachelor.adapter.PostsAdapter;
+import eg.edu.guc.tala3nybachelor.controller.Controller;
 import eg.edu.guc.tala3nybachelor.model.Comment;
 import eg.edu.guc.tala3nybachelor.model.Post;
+import eg.edu.guc.tala3nybachelor.model.SetData;
+import eg.edu.guc.tala3nybachelor.singleton.RetrofitSingleton;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class Profile extends FullScreenActivity implements Animation.AnimationListener {
 
@@ -97,6 +104,7 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
     private int measuredWidth, measuredHeight;
     private PostsAdapter adapter;
     private ArrayList<Post> posts;
+    private int userId;
 
     private SharedPreferences sharedPreferences;
 
@@ -136,19 +144,19 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
 
 
         name = sharedPreferences.getString("username", "");
+        userId = sharedPreferences.getInt("userId", 1);
         txtName.setText(name);
         txtName.setTextColor(Color.argb(200, 255, 255, 255));
 
         DisplayMetrics dm = getResources().getDisplayMetrics();
         updateProfileImage(dm);
 
-        posts = new ArrayList<>();
-        posts.add(new Post("I found this great topic.", 27, 3, 9));
-        posts.add(new Post("I need help finding a place to stay in Stuttgart!", 23, 0, 3));
-        posts.add(new Post("For those interested in topics about machine learning and AI please comment or contact me", 41, 19, 34));
+//        posts = new ArrayList<>();
+//        posts.add(new Post("I found this great topic.", 27, 3, 9));
+//        posts.add(new Post("I need help finding a place to stay in Stuttgart!", 23, 0, 3));
+//        posts.add(new Post("For those interested in topics about machine learning and AI please comment or contact me", 41, 19, 34));
 
-        adapter = new PostsAdapter(this,posts);
-        postsList.setAdapter(adapter);
+        getProfile(1, this);
         postsList.setOverScrollMode(View.OVER_SCROLL_NEVER);
         postsList.setVerticalScrollBarEnabled(false);
 
@@ -216,7 +224,7 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
 
             case R.id.post_cell_likes_count:
             case R.id.post_cell_comments_count:
-                launchPostActivity();
+                //launchPostActivity();
                 break;
 
 
@@ -262,28 +270,76 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         String postBody = postEditText.getText().toString();
         if (!postBody.isEmpty()) {
             postEditText.setText("");
-            Post p = new Post(postBody, 0, 0, 0);
-            posts.add(p);
-            adapter.notifyDataSetChanged();
+            SetData data = new SetData(null, null, null, null, postBody, userId);
+            addPost("33ff8cff9c46b099e34020ababb378b8", data);
         }
     }
 
-    private void launchPostActivity() {
-        Intent post = new Intent(this, PostActivity.class);
-        post.putExtra("post-owner", name);
-        post.putExtra("post-body", "I found this great topic.");
-        post.putExtra("post-time", "27mins");
+    public void addPost(String token, SetData data) {
 
-        ArrayList<Comment> comments = new ArrayList<>();
-        comments.add(new Comment("Salma", "how can I contact you?", 12));
-        comments.add(new Comment(name, "send me an email", 10));
-        comments.add(new Comment("Salma", "ok, thanks!", 6));
+        Controller.addPost retr = RetrofitSingleton.getInstance().create(Controller.addPost.class);
+        retr.add_post(token, data, new retrofit.Callback<Post>() {
+            @Override
+            public void success(Post post, Response response) {
+                posts.add(post);
+                adapter.notifyDataSetChanged();
+            }
 
-        Gson gson = new Gson();
-        String jsonComments = gson.toJson(comments);
-        post.putExtra("comments", jsonComments);
+            @Override
+            public void failure(RetrofitError error) {
 
-        startActivity(post);
+            }
+        });
+
+    }
+
+    public void getProfile(Integer dest, final Context context) {
+        Controller.getProfilePosts retr = RetrofitSingleton.getInstance().create(Controller.getProfilePosts.class);
+
+        retr.get_profile(dest, new retrofit.Callback<ArrayList<Post>>() {
+            @Override
+            public void success(ArrayList<Post> postsRet, Response response) {
+                Log.wtf("salma", "posts in profile: " + postsRet.size());
+                posts = postsRet;
+                adapter = new PostsAdapter(context,posts);
+                postsList.setAdapter(adapter);
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.wtf("salma", error);
+            }
+        });
+    }
+
+    public void getSinglePost(final Integer id) {
+
+        Controller.getPost retr = RetrofitSingleton.getInstance().create(Controller.getPost.class);
+        retr.get_post(id, new retrofit.Callback<Post>() {
+            @Override
+            public void success(Post post, Response response) {
+                Log.wtf("salma", "succes");
+                Intent postIntent = new Intent(Profile.this, PostActivity.class);
+                postIntent.putExtra("post-id", id);
+                postIntent.putExtra("post-owner", name);
+                postIntent.putExtra("post-body", post.getBody());
+                postIntent.putExtra("post-time", "27mins");
+
+
+                Gson gson = new Gson();
+                String jsonComments = gson.toJson(post.getCommentsArray());
+                postIntent.putExtra("comments", jsonComments);
+
+                startActivity(postIntent);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.wtf("salma", error);
+            }
+        });
+
     }
 
     private void updateProfileImage(final DisplayMetrics dm) {

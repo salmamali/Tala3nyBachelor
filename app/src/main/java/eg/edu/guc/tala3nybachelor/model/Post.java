@@ -7,6 +7,12 @@ import java.util.ArrayList;
  */
 
 public class Post {
+    private Integer id;
+
+    public Integer getId() {
+        return id;
+    }
+
     private String body;
     private int timestamp;
     private int commentCount;
@@ -36,5 +42,19 @@ public class Post {
 
     public int getLikes() {
         return likes;
+    }
+
+    public ArrayList<Comment> getCommentsArray() {
+        return comments;
+    }
+
+
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public String getUpdated_at() {
+        return updated_at;
     }
 }

@@ -3,9 +3,11 @@ package eg.edu.guc.tala3nybachelor.adapter;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.joanzapata.iconify.Iconify;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import eg.edu.guc.tala3nybachelor.Profile;
 import eg.edu.guc.tala3nybachelor.R;
 import eg.edu.guc.tala3nybachelor.model.Post;
 
@@ -41,7 +44,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Post singlePost = posts.get(position);
+        final Post singlePost = posts.get(position);
 
         if(singlePost.getBody() != null)
             holder.txtBody.setText(singlePost.getBody());
@@ -68,6 +71,15 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         holder.txtLikesCount.setTypeface(light);
         holder.txtFollowersCount.setTypeface(light);
 
+        holder.postLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.wtf("salma", "click");
+                if(context instanceof Profile)
+                    ((Profile)context).getSinglePost(singlePost.getId());
+            }
+        });
+
     }
 
     @Override
@@ -84,6 +96,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         @Bind(R.id.drawer_comment_icon) IconTextView icnComment;
         @Bind(R.id.drawer_follow_icon) IconTextView icnFollow;
         @Bind(R.id.post_cell_followers_count) TextView txtFollowersCount;
+        @Bind(R.id.post_layout)
+        RelativeLayout postLayout;
 
         public ViewHolder(View v) {
             super(v);

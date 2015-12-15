@@ -1,10 +1,12 @@
 package eg.edu.guc.tala3nybachelor;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,7 +20,14 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import eg.edu.guc.tala3nybachelor.adapter.CommentsAdapter;
+import eg.edu.guc.tala3nybachelor.controller.Controller;
 import eg.edu.guc.tala3nybachelor.model.Comment;
+import eg.edu.guc.tala3nybachelor.model.Post;
+import eg.edu.guc.tala3nybachelor.model.SetData;
+import eg.edu.guc.tala3nybachelor.singleton.RetrofitSingleton;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class PostActivity extends FullScreenActivity {
 
@@ -33,6 +42,10 @@ public class PostActivity extends FullScreenActivity {
     @Bind(R.id.post_comment_edit_text) EditText editComment;
 
     @Bind(R.id.post_comment_button) Button btnPostComment;
+
+    private int postId;
+    private ArrayList<Comment> comments;
+    private CommentsAdapter adapter;
 
 
     @Override
@@ -49,6 +62,7 @@ public class PostActivity extends FullScreenActivity {
         editComment.setTypeface(light);
         btnPostComment.setTypeface(light);
 
+        postId = getIntent().getExtras().getInt("post-id");
         sender = getIntent().getExtras().getString("post-owner");
         txtSender.setText(sender);
         String body = getIntent().getExtras().getString("post-body");
@@ -58,9 +72,9 @@ public class PostActivity extends FullScreenActivity {
 
         String commentsJson = getIntent().getExtras().getString("comments");
         Gson gson = new Gson();
-        final ArrayList<Comment> comments = gson.fromJson(commentsJson, new TypeToken<ArrayList<Comment>>(){}.getType());
+        comments = gson.fromJson(commentsJson, new TypeToken<ArrayList<Comment>>(){}.getType());
 
-        final CommentsAdapter adapter = new CommentsAdapter(this, comments);
+        adapter = new CommentsAdapter(this, comments);
         commentsList.setAdapter(adapter);
         commentsList.setOverScrollMode(View.OVER_SCROLL_NEVER);
         commentsList.setVerticalScrollBarEnabled(false);
@@ -71,11 +85,35 @@ public class PostActivity extends FullScreenActivity {
         btnPostComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Comment c = new Comment(sender, editComment.getText().toString(), 0);
-                comments.add(c);
-                adapter.notifyDataSetChanged();
-                editComment.setText("");
+                Log.wtf("salma", "post id: " + postId);
+                SetData data = new SetData(editComment.getText().toString(), postId, 1, 1, null, null);
+                Log.wtf("salma", "text: " + data.text+ " postId: " + data.postId + " post_id: "+ data.post_id + " user_id: " + data.user_id);
+                addComment("33ff8cff9c46b099e34020ababb378b8", data);
             }
         });
     }
+
+    public void addComment(String token, final SetData data) {
+
+        Controller.addComment retr = RetrofitSingleton.getInstance().create(Controller.addComment.class);
+
+        retr.add_comment(token, data, new Callback<Post>() {
+            @Override
+            public void success(Post post, Response response) {
+                Log.wtf("salma", "in first success");
+                comments = post.getCommentsArray();
+                adapter = new CommentsAdapter(PostActivity.this, comments);
+                commentsList.setAdapter(adapter);
+                editComment.setText("");
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.wtf("salma", error);
+            }
+        });
+
+    }
+
+
 }
