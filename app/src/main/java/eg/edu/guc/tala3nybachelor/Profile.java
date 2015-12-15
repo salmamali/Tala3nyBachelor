@@ -143,9 +143,9 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         updateProfileImage(dm);
 
         posts = new ArrayList<>();
-        posts.add(new Post("I found this great topic.", 27, 3, 9));
-        posts.add(new Post("I need help finding a place to stay in Stuttgart!", 23, 0, 3));
-        posts.add(new Post("For those interested in topics about machine learning and AI please comment or contact me", 41, 19, 34));
+        posts.add(new Post("I found this great topic.", "27", 3, 9));
+        posts.add(new Post("I need help finding a place to stay in Stuttgart!", "23", 0, 3));
+        posts.add(new Post("For those interested in topics about machine learning and AI please comment or contact me", "41", 19, 34));
 
         adapter = new PostsAdapter(this,posts);
         postsList.setAdapter(adapter);
@@ -262,7 +262,7 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         String postBody = postEditText.getText().toString();
         if (!postBody.isEmpty()) {
             postEditText.setText("");
-            Post p = new Post(postBody, 0, 0, 0);
+            Post p = new Post(postBody, "0", 0, 0);
             posts.add(p);
             adapter.notifyDataSetChanged();
         }

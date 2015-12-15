@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -30,7 +31,7 @@ public class Feed extends FullScreenActivity {
     @Bind(R.id.feed_title) TextView feedTitle;
 
     private SharedPreferences sharedPreferences;
-    ArrayList<Post> posts;
+    private static ArrayList<Post>  posts;
     private PostsAdapter adapter;
     private String name;
 
@@ -43,8 +44,6 @@ public class Feed extends FullScreenActivity {
         sharedPreferences = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE);
         name = sharedPreferences.getString("username", "");
 
-        //posts = new ArrayList<Post>();
-        getPosts();
         /*posts.add(new Post("I found this great topic.", 27, 3, 9));
         posts.add(new Post("I need help finding a place to stay in Stuttgart!", 23, 0, 3));
         posts.add(new Post("For those interested in topics about machine learning and AI please comment or contact me", 41, 19, 34));*/
@@ -53,9 +52,16 @@ public class Feed extends FullScreenActivity {
         Typeface light=Typeface.createFromAsset(getAssets(),"fonts/montserrat-light.otf");
         feedTitle.setTypeface(light);
 
+        posts = new ArrayList<>();
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         feedList.setLayoutManager(llm);
+        feedList.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        feedList.setVerticalScrollBarEnabled(false);
+        adapter = new PostsAdapter(Feed.this, posts);
+        feedList.setAdapter(adapter);
+
+        getPosts();
     }
 
     public void getPosts() {
@@ -63,10 +69,11 @@ public class Feed extends FullScreenActivity {
         retr.get_posts(new Callback<ArrayList<Post>>() {
             @Override
             public void success(ArrayList<Post> posts, Response response) {
-                adapter = new PostsAdapter(Feed.this, posts);
-                feedList.setAdapter(adapter);
-                feedList.setOverScrollMode(View.OVER_SCROLL_NEVER);
-                feedList .setVerticalScrollBarEnabled(false);
+                Log.wtf("here", "results in " + posts.size());
+                for (Post p:posts) {
+                    Feed.posts.add(p);
+                }
+                adapter.notifyDataSetChanged();
             }
 
             @Override

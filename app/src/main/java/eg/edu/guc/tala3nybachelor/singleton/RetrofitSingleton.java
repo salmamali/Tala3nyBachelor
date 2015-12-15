@@ -15,7 +15,7 @@ public class RetrofitSingleton {
 
     public static RestAdapter getInstance(){
         if (restAdapter == null) {
-            restAdapter = new RestAdapter.Builder().setEndpoint("http://localhost:3000").build();
+            restAdapter = new RestAdapter.Builder().setEndpoint("http://10.0.0.2:3000").build();
         }
         return restAdapter;
     }
