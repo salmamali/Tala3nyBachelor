@@ -94,8 +94,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         @Bind(R.id.post_cell_comments_count) TextView txtCommentsCount;
         @Bind(R.id.drawer_like_icon) IconTextView icnLike;
         @Bind(R.id.drawer_comment_icon) IconTextView icnComment;
-        @Bind(R.id.drawer_follow_icon) IconTextView icnFollow;
-        @Bind(R.id.post_cell_followers_count) TextView txtFollowersCount;
         @Bind(R.id.post_layout)
         RelativeLayout postLayout;
 
