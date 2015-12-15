@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -24,7 +25,14 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import eg.edu.guc.tala3nybachelor.adapter.FriendsAdapter;
+import eg.edu.guc.tala3nybachelor.controller.Controller;
+import eg.edu.guc.tala3nybachelor.model.FollowerResponse;
 import eg.edu.guc.tala3nybachelor.model.Friend;
+import eg.edu.guc.tala3nybachelor.model.User;
+import eg.edu.guc.tala3nybachelor.singleton.RetrofitSingleton;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class FriendsActivity extends FullScreenActivity implements Animation.AnimationListener{
 
@@ -39,6 +47,7 @@ public class FriendsActivity extends FullScreenActivity implements Animation.Ani
     @Bind(R.id.search_layout)
     LinearLayout searchLayout;
     @Bind(R.id.exit_search) TextView exitSearch;
+    private ArrayList<Friend> friendsArray;
     private FriendsAdapter friendsAdapter;
     private Animation slideLeft;
     private Animation slideRight;
@@ -50,14 +59,8 @@ public class FriendsActivity extends FullScreenActivity implements Animation.Ani
         setContentView(R.layout.activity_friends);
         ButterKnife.bind(this);
 
-        ArrayList<Friend> friends = new ArrayList<>();
-        Friend f1 = new Friend(true, "Salma ElTarzi");
-        Friend f2 = new Friend(true, "Menna Darwish");
-        Friend f3 = new Friend(true, "Salma Ali");
-        friends.add(f2);
-        friends.add(f1);
-        friends.add(f3);
-        friendsAdapter = new FriendsAdapter(this, friends);
+        friendsArray = new ArrayList<>();
+        friendsAdapter = new FriendsAdapter(this, friendsArray);
         friendsList.setAdapter(friendsAdapter);
         Iconify.addIcons(searchIcon, exitSearch);
         slideLeft = AnimationUtils.loadAnimation(this, R.anim.slide_left_right);
@@ -110,11 +113,46 @@ public class FriendsActivity extends FullScreenActivity implements Animation.Ani
 
             }
         });
+        getFollowers();
 
+    }
 
+    private void getFollowers() {
+        Controller.getFollowings followingsRequest = RetrofitSingleton.getInstance().create(Controller.getFollowings.class);
+        String accessToken = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE).getString("accessToken", "");
+        followingsRequest.get_followings(accessToken, new Callback<ArrayList<FollowerResponse>>() {
+            @Override
+            public void success(ArrayList<FollowerResponse> followerResponses, Response response) {
+                Log.d("found followers", followerResponses.size() + "");
+                for (FollowerResponse f: followerResponses){
+                    getUserName((int) f.getFollower_id());
+                }
+            }
 
+            @Override
+            public void failure(RetrofitError error) {
 
+            }
+        });
+    }
 
+    private void getUserName(int follower_id) {
+        Controller.getUser userRequest = RetrofitSingleton.getInstance().create(Controller.getUser.class);
+        String accessToken = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE).getString("accessToken", "");
+        userRequest.get_user(accessToken, follower_id, new Callback<User>() {
+            @Override
+            public void success(User user, Response response) {
+                Log.d("got name", user.getName());
+                Friend f = new Friend(user.getName());
+                friendsAdapter.add(f);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.wtf("error in get name", error.getMessage());
+
+            }
+        });
     }
 
     @Override

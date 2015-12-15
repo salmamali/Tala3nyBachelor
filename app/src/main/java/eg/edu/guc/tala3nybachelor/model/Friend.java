@@ -9,8 +9,8 @@ public class Friend {
     private boolean accepted;
     private String imageUrl;
 
-    public Friend(boolean accepted, String friend) {
-        this.accepted = accepted;
+    public Friend(String friend) {
+        this.accepted = false;
         this.friend = friend;
     }
 

@@ -143,18 +143,16 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         lastName.setTypeface(light);
 
 
-        name = sharedPreferences.getString("username", "");
+
         userId = sharedPreferences.getInt("userId", 1);
+        name = sharedPreferences.getString("userName", "");
         txtName.setText(name);
         txtName.setTextColor(Color.argb(200, 255, 255, 255));
 
         DisplayMetrics dm = getResources().getDisplayMetrics();
         updateProfileImage(dm);
 
-//        posts = new ArrayList<>();
-//        posts.add(new Post("I found this great topic.", 27, 3, 9));
-//        posts.add(new Post("I need help finding a place to stay in Stuttgart!", 23, 0, 3));
-//        posts.add(new Post("For those interested in topics about machine learning and AI please comment or contact me", 41, 19, 34));
+
 
         getProfile(1, this);
         postsList.setOverScrollMode(View.OVER_SCROLL_NEVER);
@@ -272,6 +270,7 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
             postEditText.setText("");
             SetData data = new SetData(null, null, null, null, postBody, userId);
             addPost("33ff8cff9c46b099e34020ababb378b8", data);
+
         }
     }
 

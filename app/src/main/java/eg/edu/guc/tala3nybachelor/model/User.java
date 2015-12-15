@@ -28,9 +28,6 @@ public class User {
         return avatar;
     }
 
-    public String getName() {
-        return name;
-    }
 
     public ArrayList<Post> getPosts() {
         return posts;
@@ -50,5 +47,9 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getName() {
+        return name;
     }
 }
