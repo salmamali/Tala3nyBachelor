@@ -1,5 +1,6 @@
 package eg.edu.guc.tala3nybachelor;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -51,6 +53,7 @@ public class FriendsActivity extends FullScreenActivity implements Animation.Ani
     private FriendsAdapter friendsAdapter;
     private Animation slideLeft;
     private Animation slideRight;
+    private ArrayList<FollowerResponse> followers;
 
 
     @Override
@@ -77,6 +80,15 @@ public class FriendsActivity extends FullScreenActivity implements Animation.Ani
                 searchLayout.startAnimation(slideLeft);
 
 
+            }
+        });
+
+        friendsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(FriendsActivity.this, Profile.class);
+                i.putExtra("notUserId", followers.get(position).getFollower_id()+"");
+                startActivity(i);
             }
         });
 
@@ -124,6 +136,7 @@ public class FriendsActivity extends FullScreenActivity implements Animation.Ani
             @Override
             public void success(ArrayList<FollowerResponse> followerResponses, Response response) {
                 Log.d("found followers", followerResponses.size() + "");
+                followers = followerResponses;
                 for (FollowerResponse f: followerResponses){
                     getUserName((int) f.getFollower_id());
                 }

@@ -10,9 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.widget.IconTextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -22,8 +25,12 @@ import eg.edu.guc.tala3nybachelor.Profile;
 import eg.edu.guc.tala3nybachelor.R;
 import eg.edu.guc.tala3nybachelor.controller.Controller;
 import eg.edu.guc.tala3nybachelor.model.Post;
+
 import eg.edu.guc.tala3nybachelor.model.User;
 import eg.edu.guc.tala3nybachelor.singleton.RetrofitSingleton;
+import eg.edu.guc.tala3nybachelor.singleton.RetrofitSingleton;
+import retrofit.Callback;
+
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -56,7 +63,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final Post singlePost = posts.get(position);
 
         if(singlePost.getBody() != null)
@@ -78,11 +85,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         Typeface light=Typeface.createFromAsset(context.getAssets(), "fonts/montserrat-light.otf");
         holder.icnLike.setTypeface(light);
         holder.icnComment.setTypeface(light);
-        holder.icnFollow.setTypeface(light);
+      //  holder.icnFollow.setTypeface(light);
         holder.txtBody.setTypeface(light);
         holder.txtCommentsCount.setTypeface(light);
         holder.txtLikesCount.setTypeface(light);
-        holder.txtFollowersCount.setTypeface(light);
+       // holder.txtFollowersCount.setTypeface(light);
 
         holder.postLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +100,33 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             }
         });
 
+        holder.icnLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                singlePost.setLikes(singlePost.getLikes() + 1);
+                LikePost(singlePost.getId(), singlePost.getLikes(), holder, singlePost);
+
+            }
+        });
+
+    }
+
+    public void LikePost(int id, final int likes, final ViewHolder holder, final Post singlePost) {
+        Controller.LikePost retr = RetrofitSingleton.getInstance().create(Controller.LikePost.class);
+        String accessToken = context.getSharedPreferences("eg.edu.guc.tala3nybachelor", context.MODE_PRIVATE).getString("accessToken", "");
+        retr.post_like(accessToken, id, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                Toast.makeText(context, "You have liked this post", Toast.LENGTH_SHORT).show();
+                holder.txtLikesCount.setText(likes+" likes");
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d("RetrofitError", error.getMessage());
+            }
+        });
     }
 
     public void getUser(String token, int id) {
@@ -123,8 +157,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         @Bind(R.id.post_cell_comments_count) TextView txtCommentsCount;
         @Bind(R.id.drawer_like_icon) IconTextView icnLike;
         @Bind(R.id.drawer_comment_icon) IconTextView icnComment;
-        @Bind(R.id.drawer_follow_icon) IconTextView icnFollow;
-        @Bind(R.id.post_cell_followers_count) TextView txtFollowersCount;
         @Bind(R.id.post_layout)
         RelativeLayout postLayout;
 

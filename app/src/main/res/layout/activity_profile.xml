@@ -198,15 +198,7 @@
                 android:layout_below="@+id/personal_info_text"
                 />
 
-            <TextView
-                android:id="@+id/lastname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Last Name: ElBeih"
-                android:textSize="16sp"
-                android:layout_marginLeft="10dp"
-                android:layout_below="@+id/firstname"
-                />
+
 
 
             <TextView
@@ -215,7 +207,7 @@
                 android:layout_height="wrap_content"
                 android:text="Age: 21"
                 android:textSize="16sp"
-                android:layout_below="@+id/lastname"
+                android:layout_below="@+id/firstname"
                 android:layout_marginLeft="10dp"
                 />
 

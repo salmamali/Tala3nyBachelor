@@ -9,6 +9,7 @@ public class Friend {
     private boolean accepted;
     private String imageUrl;
 
+
     public Friend(String friend) {
         this.accepted = false;
         this.friend = friend;

@@ -14,6 +14,7 @@ import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.Header;
+import retrofit.http.PATCH;
 import retrofit.http.POST;
 import retrofit.http.Path;
 import retrofit.http.Query;
@@ -37,13 +38,6 @@ public class Controller {
         @GET("/api/posts/{id}")
         void get_post(@Path("id") Integer id, Callback <Post> callback);
     }
-
-//    public interface  addPost {
-//
-//        @POST("/api/posts")
-//        void add_post(SetData data, )
-//
-//    }
 
     public interface addComment {
 
@@ -73,5 +67,10 @@ public class Controller {
     public interface  getFollowings {
         @GET("/api/followings/")
         void get_followings(@Header("Authorization")String user, Callback<ArrayList<FollowerResponse>> callback);
+    }
+
+    public interface LikePost {
+        @PATCH("/ api/posts/{id}")
+        void post_like(@Header("Authorization")String user,@Path("id") int postId, Callback<Response> callback);
     }
 }

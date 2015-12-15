@@ -70,6 +70,7 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
     @Bind(R.id.profile_info_nationality) TextView txtNationality;
 
     //icons
+    @Bind(R.id.follow_user) IconTextView followUser;
     @Bind(R.id.profile_options_post_icon)
     IconTextView icnPost;
     @Bind(R.id.profile_options_messages_icon)
@@ -98,7 +99,6 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
     RelativeLayout infoLayout;
     @Bind(R.id.personal_info_text) TextView personalInfoText;
     @Bind(R.id.firstname) TextView firstName;
-    @Bind(R.id.lastname) TextView lastName;
 
     private String name;
     private Animation slideRight, slideLeft;
@@ -128,14 +128,6 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         measuredHeight = drawerPane.getMeasuredHeight();
         measuredWidth = drawerPane.getMeasuredWidth();
 
-        try {
-            boolean notUser = getIntent().getBooleanExtra("notUser", false);
-            if (notUser) {
-
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
 
         Typeface light = Typeface.createFromAsset(getAssets(), "fonts/montserrat-light.otf");
 
@@ -152,27 +144,59 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         txtGender.setTypeface(light);
         txtNationality.setTypeface(light);
         firstName.setTypeface(light);
-        lastName.setTypeface(light);
 
 
 
-        userId = sharedPreferences.getString("userId", "1");
+        userId = sharedPreferences.getString("userId", "");
         name = sharedPreferences.getString("userName", "");
         txtName.setText(name);
         txtName.setTextColor(Color.argb(200, 255, 255, 255));
+
+        try {
+            String notUser = getIntent().getStringExtra("notUserId");
+            if (notUser!=null || !notUser.equals("")) {
+                userId = notUser;
+                icnMessage.setVisibility(View.GONE);
+                followUser.setVisibility(View.VISIBLE);
+
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+
 
         DisplayMetrics dm = getResources().getDisplayMetrics();
         updateProfileImage(dm);
 
 
 
-        getProfile(1, this);
+        getProfile(Integer.parseInt(userId), this);
         postsList.setOverScrollMode(View.OVER_SCROLL_NEVER);
         postsList.setVerticalScrollBarEnabled(false);
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         postsList.setLayoutManager(llm);
+    }
+
+    public void getUser() {
+        Controller.getUser retr = RetrofitSingleton.getInstance().create(Controller.getUser.class);
+        String accessToken = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE).getString("accessToken", "");
+        retr.get_user(accessToken, Integer.parseInt(userId), new retrofit.Callback<User>() {
+            @Override
+            public void success(User user, Response response) {
+                firstName.setText("Name: "+user.getName());
+                txtAge.setText("Date of Birth: "+user.getDate_of_birth());
+                txtGender.setText("Gender: "+user.getGender());
+                txtNationality.setText("Country: "+user.getNationality());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
 
     @Override
@@ -281,6 +305,7 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         if (!postBody.isEmpty()) {
             postEditText.setText("");
             SetData data = new SetData(null, null, null, null, postBody, Integer.parseInt(userId));
+
             addPost(accessToken, data);
 
         }

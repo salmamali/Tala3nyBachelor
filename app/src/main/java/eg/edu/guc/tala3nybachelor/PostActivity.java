@@ -96,6 +96,8 @@ public class PostActivity extends FullScreenActivity {
                 addComment(accessToken, data);
             }
         });
+
+
     }
 
     public void addComment(String token, final SetData data) {
