@@ -62,11 +62,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         Typeface light=Typeface.createFromAsset(context.getAssets(), "fonts/montserrat-light.otf");
         holder.icnLike.setTypeface(light);
         holder.icnComment.setTypeface(light);
-        holder.icnFollow.setTypeface(light);
+      //  holder.icnFollow.setTypeface(light);
         holder.txtBody.setTypeface(light);
         holder.txtCommentsCount.setTypeface(light);
         holder.txtLikesCount.setTypeface(light);
-        holder.txtFollowersCount.setTypeface(light);
+       // holder.txtFollowersCount.setTypeface(light);
 
     }
 
@@ -82,8 +82,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         @Bind(R.id.post_cell_comments_count) TextView txtCommentsCount;
         @Bind(R.id.drawer_like_icon) IconTextView icnLike;
         @Bind(R.id.drawer_comment_icon) IconTextView icnComment;
-        @Bind(R.id.drawer_follow_icon) IconTextView icnFollow;
-        @Bind(R.id.post_cell_followers_count) TextView txtFollowersCount;
 
         public ViewHolder(View v) {
             super(v);

@@ -76,24 +76,7 @@
         android:onClick="onClick"
         />
 
-    <TextView
-        android:id="@+id/post_cell_followers_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/post_cell_body"
-        android:layout_toEndOf="@+id/post_cell_comments_count"
-        android:textColor="@color/black_overlay"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        android:text="2 followers"
-        android:layout_marginTop="-15dp"
-        android:paddingStart="3dp"
-        android:paddingEnd="5dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:maxLines="1"
-        android:onClick="onClick"
-        />
+
 
     <View
         android:id="@+id/separator"
@@ -146,21 +129,7 @@
         android:paddingEnd="@dimen/profile_options_padding"
         />
 
-        <com.joanzapata.iconify.widget.IconTextView
-            android:id="@+id/drawer_follow_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="{fa-check-circle-o} Follow"
-            android:textSize="@dimen/profile_icon_size"
-            android:textColor="@color/colorAccent"
-            android:textStyle="bold"
-            android:onClick="onClick"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:paddingStart="@dimen/profile_options_padding"
-            android:paddingEnd="@dimen/profile_options_padding"
-            />
+
     </LinearLayout>
 
     <View
