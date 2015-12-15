@@ -160,6 +160,7 @@ public class Profile extends FullScreenActivity implements Animation.AnimationLi
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         postsList.setLayoutManager(llm);
+        getUser();
     }
 
     public void getUser() {
