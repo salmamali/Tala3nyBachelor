@@ -24,6 +24,15 @@ public class User {
     private String date_of_birth;
     private String email;
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+
+    public ArrayList<Post> getPosts() {
+        return posts;
+    }
+
     public String getFirstName() {
         return firstName;
     }

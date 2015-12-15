@@ -43,6 +43,16 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
         if(singleComment.getText() != null)
             holder.txtBody.setText(singleComment.getText());
 
+
+        //int time = singleComment.getTimeStamp();
+//        if(time != -1) {
+//            if(time == 0) {
+//                holder.txtTimeStamp.setText("just now");
+//            } else {
+//                holder.txtTimeStamp.setText(time + "mins");
+//            }
+//        }
+
         /*int time = singleComment.getTimeStamp();
         if(time != -1) {
             if(time == 0) {
@@ -51,6 +61,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
                 holder.txtTimeStamp.setText(time + "mins");
             }
         }*/
+
         Typeface light=Typeface.createFromAsset(context.getAssets(), "fonts/montserrat-light.otf");
         holder.txtSender.setTypeface(light);
         holder.txtBody.setTypeface(light);
