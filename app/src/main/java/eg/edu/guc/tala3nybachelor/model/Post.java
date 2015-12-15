@@ -80,4 +80,8 @@ public class Post {
     public String getUpdated_at() {
         return updated_at;
     }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
 }

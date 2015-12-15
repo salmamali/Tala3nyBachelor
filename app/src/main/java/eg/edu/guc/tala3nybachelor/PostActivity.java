@@ -2,6 +2,7 @@ package eg.edu.guc.tala3nybachelor;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -88,9 +89,12 @@ public class PostActivity extends FullScreenActivity {
                 Log.wtf("salma", "post id: " + postId);
                 SetData data = new SetData(editComment.getText().toString(), postId, 1, 1, null, null);
                 Log.wtf("salma", "text: " + data.text+ " postId: " + data.postId + " post_id: "+ data.post_id + " user_id: " + data.user_id);
-                addComment("33ff8cff9c46b099e34020ababb378b8", data);
+                String accessToken = getSharedPreferences("eg.edu.guc.tala3nybachelor", MODE_PRIVATE).getString("accessToken", "");
+                addComment(accessToken, data);
             }
         });
+
+
     }
 
     public void addComment(String token, final SetData data) {

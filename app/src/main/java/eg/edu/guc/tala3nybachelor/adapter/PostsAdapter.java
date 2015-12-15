@@ -9,9 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.widget.IconTextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -19,7 +22,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import eg.edu.guc.tala3nybachelor.Profile;
 import eg.edu.guc.tala3nybachelor.R;
+import eg.edu.guc.tala3nybachelor.controller.Controller;
 import eg.edu.guc.tala3nybachelor.model.Post;
+import eg.edu.guc.tala3nybachelor.singleton.RetrofitSingleton;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by TarekElBeih on 28/11/15.
@@ -43,7 +51,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final Post singlePost = posts.get(position);
 
         if(singlePost.getBody() != null)
@@ -80,6 +88,33 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             }
         });
 
+        holder.icnLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                singlePost.setLikes(singlePost.getLikes() + 1);
+                LikePost(singlePost.getId(), singlePost.getLikes(), holder, singlePost);
+
+            }
+        });
+
+    }
+
+    public void LikePost(int id, final int likes, final ViewHolder holder, final Post singlePost) {
+        Controller.LikePost retr = RetrofitSingleton.getInstance().create(Controller.LikePost.class);
+        String accessToken = context.getSharedPreferences("eg.edu.guc.tala3nybachelor", context.MODE_PRIVATE).getString("accessToken", "");
+        retr.post_like(accessToken, id, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                Toast.makeText(context, "You have liked this post", Toast.LENGTH_SHORT).show();
+                holder.txtLikesCount.setText(likes+" likes");
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d("RetrofitError", error.getMessage());
+            }
+        });
     }
 
     @Override
