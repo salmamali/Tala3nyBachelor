@@ -6,24 +6,27 @@ package eg.edu.guc.tala3nybachelor.model;
 
 public class Comment {
     private String sender;
-    private String body;
-    private int timeStamp;
+    private String text;
+    private String created_at;
+    private String updated_at;
+    private int id;
+    private Integer post_id;
+    private Integer user_id;
+
 
     public Comment(String sender, String body, int timeStamp) {
         this.sender = sender;
-        this.body = body;
-        this.timeStamp = timeStamp;
+        //this.body = body;
+        //this.timeStamp = timeStamp;
     }
 
     public String getSender() {
         return sender;
     }
 
-    public String getBody() {
-        return body;
+    public String getText() {
+        return text;
     }
 
-    public int getTimeStamp() {
-        return timeStamp;
-    }
+
 }

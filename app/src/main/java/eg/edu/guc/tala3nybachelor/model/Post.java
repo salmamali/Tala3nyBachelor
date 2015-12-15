@@ -1,5 +1,7 @@
 package eg.edu.guc.tala3nybachelor.model;
 
+import java.util.ArrayList;
+
 /**
  * Created by TarekElBeih on 28/11/15.
  */
@@ -11,6 +13,7 @@ public class Post {
     private int likes;
     private String created_at;
     private String updated_at;
+    private ArrayList<Comment> comments;
 
     public Post(String body, int timestamp, int comments, int likes) {
         this.body = body;
